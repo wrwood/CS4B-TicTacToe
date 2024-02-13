@@ -34,8 +34,7 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        singlePlayerButton.setOnAction(e->
-        {
+        singlePlayerButton.setOnAction(e-> {
             getBoard();
         });
         onlineButton.setOnAction(e->{

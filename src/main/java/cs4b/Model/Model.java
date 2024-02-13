@@ -11,7 +11,7 @@ public class Model {
         this.viewFactory = new ViewFactory();
     }
 
-    // Snychronized prevents
+    // Synchronized prevents
     public static synchronized Model getInstance()
     {
         if (model == null) {
