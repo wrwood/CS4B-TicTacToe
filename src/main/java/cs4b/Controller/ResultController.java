@@ -11,19 +11,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable {
+public class ResultController implements Initializable {
 
     @FXML
-    private Button singlePlayerButton;
+    private Button playAgainButton;
   
     @FXML
-    private Button onlineButton;
+    private Button exitGameButton;
 
     @FXML
-    private Button localButton;
-
- 	@FXML
-    private Button quitButton;
+    private Button mainMenuButton;
 
     @FXML
     void exitProgram(ActionEvent event) {
@@ -34,35 +31,32 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        singlePlayerButton.setOnAction(e-> {
-            getBoard();
+        playAgainButton.setOnAction(e-> {
+            closeResults();
         });
-        onlineButton.setOnAction(e->{
-            getLoadingScreen();
+        mainMenuButton.setOnAction(e->{
+            showMainMenu();
         });
-        localButton.setOnAction(e->{
-            getBoard();
-        });
-        quitButton.setOnAction(e->{
+        exitGameButton.setOnAction(e->{
             System.exit(0);
         });
     }
 
-    private void getBoard() {
-        Stage stage = (Stage)singlePlayerButton.getScene().getWindow();
+    private void showMainMenu() {
+        Stage stage = (Stage)mainMenuButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
-            Model.getInstance().getViewFactory().showBoard();
+            Model.getInstance().getViewFactory().showMainMenu();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
-
-    private void getLoadingScreen() {
-        Stage stage = (Stage)onlineButton.getScene().getWindow();
+    
+    private void closeResults() {
+        Stage stage = (Stage)playAgainButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
-            Model.getInstance().getViewFactory().showLoadingScreen();
+            Model.getInstance().getViewFactory().showBoard();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

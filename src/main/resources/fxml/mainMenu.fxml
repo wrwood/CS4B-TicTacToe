@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4b.Controller.MainMenuController">
-   <children>
-      <Text layoutX="166.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CS4B Tic Tac Toe">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Text>
-      <Button fx:id="singlePlayerButton" layoutX="241.0" layoutY="142.0" mnemonicParsing="false" text="Single Player">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="localButton" layoutX="224.0" layoutY="206.0" mnemonicParsing="false" text="Local Multiplayer">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="onlineButton" layoutX="219.0" layoutY="275.0" mnemonicParsing="false" text="Online Multiplayer">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="quitButton" layoutX="274.0" layoutY="344.0" mnemonicParsing="false" onAction="#exitProgram" text="Quit">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-   </children>
-</AnchorPane>
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4b.Controller.MainMenuController">
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#exitProgram" text="Quit" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CS4B Tic Tac Toe" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Text>
+            <Button fx:id="onlineButton" mnemonicParsing="false" text="Online Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="singlePlayerButton" mnemonicParsing="false" text="Single Player" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="localButton" mnemonicParsing="false" text="Local Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+   </center>
+</BorderPane>
