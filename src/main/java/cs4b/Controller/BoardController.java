@@ -41,10 +41,6 @@ public class BoardController {
         });
     }
 
-    public GridPane getBoardRoot() {
-        return boardRoot;
-    }
-
     private void openMenu() {
         Stage stage = (Stage)menuButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
