@@ -1,0 +1,33 @@
+.button {
+    -fx-background-color: linear-gradient(#4a4a4a, #202020);
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #0f2a4c;
+}
+
+.anchor-pane {
+    -fx-background-color: black;
+}
+
+.grid-pane {
+    -fx-background-color: black;
+}
+
+.border-pane {
+    -fx-background-color: black;
+    -fx-fill: black;
+}
+
+
+.pane {
+    -fx-background-color: black;
+}
+.vbox {
+    -fx-background-color: black;
+}
+
+.text {
+    -fx-fill: white;
+}
