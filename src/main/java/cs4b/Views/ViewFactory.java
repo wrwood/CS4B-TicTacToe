@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
 
 /*
     Structured as
@@ -91,6 +93,7 @@ public class ViewFactory {
 // ShowPane ==================================================
     public void showMainMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainMenu.fxml"));
+
         createStage(loader);
     }
 
@@ -118,6 +121,13 @@ public class ViewFactory {
     private void createStage(FXMLLoader loader) throws IOException {
         Scene scene = null;
         scene = new Scene(loader.load());
+        URL styleSheetURL = getClass().getResource("/StyleSheet/darkMode.css");
+        if(styleSheetURL != null) {
+            scene.getStylesheets().add(styleSheetURL.toExternalForm());
+        } else {
+            System.out.println("Stylesheet not found.");
+        }
+
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe");

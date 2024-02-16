@@ -1,54 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4b.Controller.MainMenuController">
-   <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints vgrow="SOMETIMES" />
-          <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#exitProgram" text="Quit" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CS4B Tic Tac Toe" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Text>
-            <Button fx:id="onlineButton" mnemonicParsing="false" text="Online Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button fx:id="singlePlayerButton" mnemonicParsing="false" text="Single Player" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button fx:id="localButton" mnemonicParsing="false" text="Local Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-         </children>
-      </GridPane>
-   </center>
-</BorderPane>
+<GridPane fx:id="gridPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../StyleSheet/darkMode.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4b.Controller.MainMenuController">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="40.0" />
+        <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <BorderPane GridPane.columnIndex="1">
+            <center>
+                <GridPane stylesheets="@../StyleSheet/darkMode.css" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="719.3333740234375" minWidth="539.3333129882812" prefWidth="554.0000610351562" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Button fx:id="quitButton" mnemonicParsing="false" onAction="#exitProgram" text="Quit" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CS4B Tic Tac Toe" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="onlineButton" mnemonicParsing="false" text="Online Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="singlePlayerButton" mnemonicParsing="false" styleClass="Button" stylesheets="@../StyleSheet/darkMode.css" text="Single Player" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="localButton" mnemonicParsing="false" text="Local Multiplayer" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                    </children>
+               <styleClass>
+                  <String fx:value="Button" />
+                  <String fx:value="Button" />
+               </styleClass>
+                </GridPane>
+            </center>
+        </BorderPane>
+        <Pane fx:id="imagePane" prefHeight="720.0" prefWidth="614.0" />
+    </children>
+   <styleClass>
+      <String fx:value="Button" />
+      <String fx:value="Text" />
+      <String fx:value="anchor-pane" />
+      <String fx:value="label" />
+   </styleClass>
+</GridPane>
