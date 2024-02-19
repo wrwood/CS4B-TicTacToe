@@ -3,31 +3,43 @@
     -fx-text-fill: white;
 }
 
+.label {
+    -fx-background-color: #131516;
+}
+
+.insets {
+    -fx-background-color: #131516;
+}
+
+.root {
+    -fx-background-color: #131516;
+}
+
 .button:hover {
     -fx-background-color: #0f2a4c;
 }
 
 .anchor-pane {
-    -fx-background-color: black;
+    -fx-background-color: #131516;
 }
 
 .grid-pane {
-    -fx-background-color: black;
+    -fx-background-color: #131516;
+    -fx-fill: #131516;
 }
 
 .border-pane {
-    -fx-background-color: black;
-    -fx-fill: black;
+    -fx-background-color: #131516;
+    -fx-fill: #131516;
 }
-
 
 .pane {
-    -fx-background-color: black;
+    -fx-background-color: #131516;
 }
 .vbox {
-    -fx-background-color: black;
+    -fx-background-color: #131516;
 }
 
 .text {
-    -fx-fill: white;
+    -fx-fill: grey;
 }

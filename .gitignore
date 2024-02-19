@@ -1,0 +1,15 @@
+
+.idea/compiler.xml
+*.class
+*.xml
+*.class
+target/classes/cs4b/MainMenuController.class
+target/classes/cs4b/App.class
+target/classes/cs4b/PrimaryController.class
+target/classes/cs4b/SecondaryController.class
+target/classes/module-info.class
+target/classes/cs4b/App.class
+target/classes/cs4b/MainMenuController.class
+target/classes/cs4b/PrimaryController.class
+target/classes/cs4b/SecondaryController.class
+target/classes/module-info.class

@@ -4,6 +4,7 @@ import cs4b.Model.Model;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -75,13 +76,25 @@ public class MainMenuController implements Initializable {
 
         gridPane.setStyle("-fx-background-color: #000000;");
 
-        for (int i = 0; i < 50; i++) {
-            Circle circle = new Circle(Math.random() * 200 + 50, Color.WHITE);
-            circle.setOpacity(Math.random() * 0.01);
-            circle.setEffect(new GaussianBlur(Math.random() * 15 + 5));
-            circle.setLayoutX(Math.random() * gridPane.getPrefWidth());
-            circle.setLayoutY(Math.random() * gridPane.getPrefHeight());
-            gridPane.getChildren().add(circle);
+        for (int i = 0; i < 10; i++) {
+            double xPos = 325;
+            double yPos = 350;
+
+            Circle circle = new Circle(xPos, yPos, Math.random() * 200 + 50, Color.WHITE);
+            circle.setOpacity(Math.random() * 0.1);
+            circle.setEffect(new GaussianBlur(1));
+
+            Glow glow = new Glow();
+            glow.setLevel(Math.random() * 0.1 + 0.2);
+            circle.setEffect(glow);
+
+            imagePane.getChildren().add(circle);
+
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(3), circle);
+            transition.setByY(15);
+            transition.setCycleCount(TranslateTransition.INDEFINITE);
+            transition.setAutoReverse(true);
+            transition.play();
         }
 
         singlePlayerButton.setOnAction(e-> {
