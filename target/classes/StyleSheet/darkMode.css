@@ -43,3 +43,9 @@
 .text {
     -fx-fill: grey;
 }
+
+#imagePane {
+    -fx-background-image: url('images/smoke.png');
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}

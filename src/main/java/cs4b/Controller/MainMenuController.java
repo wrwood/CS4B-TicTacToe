@@ -135,6 +135,9 @@ public class MainMenuController implements Initializable {
         backView.setPreserveRatio(false);
         stackPane.getChildren().add(backView);
 
+        backViewExtra.setMouseTransparent(true);
+        backView.setMouseTransparent(true);
+
         //stackPane.setStyle("-fx-background-color: black");
 
         stackPane.setOpacity(0);
