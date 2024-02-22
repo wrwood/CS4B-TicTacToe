@@ -18,14 +18,9 @@ import java.util.ResourceBundle;
 public class ResultController implements Initializable {
 
     public BorderPane resultRoot;
-    @FXML
-    private Button playAgainButton;
-
-    @FXML
-    private Button exitGameButton;
-
-    @FXML
-    private Button mainMenuButton;
+    @FXML private Button playAgainButton;
+    @FXML private Button exitGameButton;
+    @FXML private Button mainMenuButton;
 
     @FXML
     void exitProgram(ActionEvent event) {
@@ -49,18 +44,18 @@ public class ResultController implements Initializable {
 
     }
 
-/*    private void VictoryEffect() {
+    private void VictoryEffect() {
         for (int i = 0; i < 20; i++) {
-            double xPos = Math.random() * imagePane.getPrefWidth();
-            double yPos = Math.random() * imagePane.getPrefHeight();
+            double xPos = Math.random() * resultRoot.getPrefWidth();
+            double yPos = Math.random() * resultRoot.getPrefHeight();
 
             Circle circle = new Circle(xPos, yPos, Math.random() * 200 + 50, Color.WHITE);
             circle.setOpacity(Math.random() * 0.5 + 0.1);
             circle.setEffect(new GaussianBlur(Math.random() * 15 + 5));
 
-            imagePane.getChildren().add(circle);
+            resultRoot.getChildren().add(circle);
         }
-    }*/
+    }
 
     private void showMainMenu() {
         Stage stage = (Stage)mainMenuButton.getScene().getWindow();

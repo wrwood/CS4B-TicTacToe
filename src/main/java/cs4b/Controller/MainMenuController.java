@@ -1,26 +1,24 @@
 package cs4b.Controller;
 
 import cs4b.Model.Model;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -28,15 +26,27 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
 
+    @FXML private StackPane stackPane;
     @FXML private GridPane gridPane;
     @FXML private Pane imagePane;
-
 
     @FXML private Button singlePlayerButton;
     @FXML private Button onlineButton;
     @FXML private Button localButton;
     @FXML private Button quitButton;
 
+    Image redEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+            "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hj-fullview.png")));
+    ImageView redView = new ImageView(redEgg);
+    Image blueEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+            "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hq-414w-2x.png")));
+    ImageView blueView = new ImageView(blueEgg);
+    Image orangeEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+            "/images/dragon_egg_png_overlay__by_lewis4721_de8r1i1-414w-2x.png")));
+    ImageView orangeView = new ImageView(orangeEgg);
+    Image Eye = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+            "/images/RedEyes.png")));
+    ImageView EyeView = new ImageView(Eye);
 
     @FXML
     void exitProgram(ActionEvent event) {
@@ -47,35 +57,45 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Image redEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hj-fullview.png")));
-        ImageView redView = new ImageView(redEgg);
-        Image blueEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hq-414w-2x.png")));
-        ImageView blueView = new ImageView(blueEgg);
-        Image orangeEgg = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                "/images/dragon_egg_png_overlay__by_lewis4721_de8r1i1-414w-2x.png")));
-        ImageView orangeView = new ImageView(orangeEgg);
+        SmokeBackGroundSetup();
+        EggSetUp();
+        EyeSetup();
+        //GodLineGlow();
 
-        eggViewAdjustments(redView, imagePane);
-        eggViewAdjustments(blueView, imagePane);
-        eggViewAdjustments(orangeView, imagePane);
+        singlePlayerButton.setOnAction(e-> {
+            getBoard();
+        });
+        onlineButton.setOnAction(e->{
+            getLoadingScreen();
+        });
+        localButton.setOnAction(e->{
+            getBoard();
+        });
+        quitButton.setOnAction(e->{
+            System.exit(0);
+        });
+    }
 
-        int bottomLine = 300;
+    private void EyeSetup() {
+        ImageView leftEye = new ImageView(Eye);
+        ImageView rightEye = new ImageView(Eye);
 
-        redView.setLayoutX(100);
-        redView.setLayoutY(bottomLine);
-        blueView.setLayoutX(200);
-        blueView.setLayoutY(bottomLine);
-        orangeView.setLayoutX(300);
-        orangeView.setLayoutY(bottomLine);
+        leftEye.setFitWidth(100);
+        leftEye.setPreserveRatio(true);
+        rightEye.setFitWidth(100);
+        rightEye.setPreserveRatio(true);
 
-        redView.setRotate(redView.getRotate() - 35);
-        //blueView.setRotate(0);
-        orangeView.setRotate(orangeView.getRotate() + 45);
+        imagePane.getChildren().add(leftEye);
+        imagePane.getChildren().add(rightEye);
 
-        gridPane.setStyle("-fx-background-color: #000000;");
+        leftEye.setLayoutX(150);
+        leftEye.setLayoutY(100);
+        rightEye.setLayoutX(300);
+        rightEye.setLayoutY(100);
+    }
 
+    private void GodLineGlow() {
+        // Can't manage to get the glow right, might resort to image glow
         for (int i = 0; i < 10; i++) {
             double xPos = 325;
             double yPos = 350;
@@ -96,19 +116,51 @@ public class MainMenuController implements Initializable {
             transition.setAutoReverse(true);
             transition.play();
         }
+    }
 
-        singlePlayerButton.setOnAction(e-> {
-            getBoard();
-        });
-        onlineButton.setOnAction(e->{
-            getLoadingScreen();
-        });
-        localButton.setOnAction(e->{
-            getBoard();
-        });
-        quitButton.setOnAction(e->{
-            System.exit(0);
-        });
+    private void SmokeBackGroundSetup() {
+        Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
+                "/images/smoke.png")));
+        ImageView backView = new ImageView(backgroundImage);
+        ImageView backViewExtra = new ImageView(backgroundImage);
+
+        backViewExtra.setRotate(backViewExtra.getRotate() - 180f);
+        backViewExtra.setFitWidth(stackPane.getPrefWidth());
+        backViewExtra.setFitHeight(stackPane.getPrefHeight());
+        backViewExtra.setPreserveRatio(false);
+        stackPane.getChildren().add(backViewExtra);
+
+        backView.setFitWidth(stackPane.getPrefWidth());
+        backView.setFitHeight(stackPane.getPrefHeight());
+        backView.setPreserveRatio(false);
+        stackPane.getChildren().add(backView);
+
+        //stackPane.setStyle("-fx-background-color: black");
+
+        stackPane.setOpacity(0);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), stackPane);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.play();
+    }
+
+    private void EggSetUp() {
+        int bottomLine = 300;
+
+        eggViewAdjustments(redView, imagePane);
+        eggViewAdjustments(blueView, imagePane);
+        eggViewAdjustments(orangeView, imagePane);
+
+        redView.setLayoutX(100);
+        redView.setLayoutY(bottomLine);
+        blueView.setLayoutX(200);
+        blueView.setLayoutY(bottomLine);
+        orangeView.setLayoutX(300);
+        orangeView.setLayoutY(bottomLine);
+
+        redView.setRotate(redView.getRotate() - 35);
+        //blueView.setRotate(0);
+        orangeView.setRotate(orangeView.getRotate() + 45);
     }
 
     // Egg ImageView adjustments

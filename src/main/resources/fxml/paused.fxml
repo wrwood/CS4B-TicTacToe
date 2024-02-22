@@ -23,7 +23,7 @@
             <RowConstraints percentHeight="25.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="exitGameButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="EXIT GAME" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <Button fx:id="exitGameButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="EXIT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
