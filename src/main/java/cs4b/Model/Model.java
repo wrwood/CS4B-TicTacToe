@@ -1,5 +1,6 @@
 package cs4b.Model;
 
+import cs4b.GameResult;
 import cs4b.Views.ViewFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ public class Model {
     private char player1Marker;
     private char player2Marker;
     private String gameMode;
+
+    public GameResult gameResult;
 
     private GameBoard gameBoard;
 
@@ -97,8 +100,14 @@ public class Model {
     private void notifyGameStatus(char winner) {
         if (winner != ' ') {
             notifyObservers("Win", winner);
+            if (winner == 'x') {
+                gameResult = GameResult.Win;
+            } else if (winner =='o') {
+                gameResult = GameResult.Loss;
+            }
         } else if (winner == 't') {
             notifyObservers("Tie", null);
+            gameResult = GameResult.Tie;
         }
         gameBoard = new GameBoard();
     }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import cs4b.GameResult;
 import cs4b.Model.Model;
 import cs4b.Model.Observer;
 import javafx.fxml.FXML;
@@ -86,15 +87,21 @@ public class BoardController implements Initializable, Observer {
 
     @Override
     public void update(String eventType, Object data) {
+        if (data.equals('x')) {
+            Model.getInstance().gameResult = GameResult.Win;
+        } else if (data.equals('o')){
+            Model.getInstance().gameResult = GameResult.Loss;
+        }
+
         switch (eventType) {
             case "PlayerTurn":
                 break;
             case "Player2Move": cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
                 cells[(int)data].setOnMouseClicked(null);
                 break;
-            case "Win": openMenu();
+            case "Win": openResult();
                 break;
-            case "Tie": openMenu();
+            case "Tie": openResult();
         }
     }
 
@@ -105,8 +112,22 @@ public class BoardController implements Initializable, Observer {
         Model.getInstance().removeObserver("Win", this);
         Model.getInstance().removeObserver("Tie", this);
         Model.getInstance().getViewFactory().closeStage(stage);
+
         try {
             Model.getInstance().getViewFactory().showPaused();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    private void openResult() {
+        Stage stage = (Stage)menuButton.getScene().getWindow();
+        Model.getInstance().removeObserver("PlayerTurn", this);
+        Model.getInstance().removeObserver("Player2Move", this);
+        Model.getInstance().removeObserver("Win", this);
+        Model.getInstance().removeObserver("Tie", this);
+        Model.getInstance().getViewFactory().closeStage(stage);
+        try {
+            Model.getInstance().getViewFactory().showResults();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

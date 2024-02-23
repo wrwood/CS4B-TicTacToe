@@ -1,10 +1,12 @@
 package cs4b.Controller;
 
+import cs4b.GameResult;
 import cs4b.Model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -18,6 +20,7 @@ import java.util.ResourceBundle;
 public class ResultController implements Initializable {
 
     public BorderPane resultRoot;
+    public Label resultLabel;
     @FXML private Button playAgainButton;
     @FXML private Button exitGameButton;
     @FXML private Button mainMenuButton;
@@ -32,7 +35,21 @@ public class ResultController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        switch (Model.getInstance().gameResult) {
+            case Win:
+                resultLabel.setText("You won!");
+                VictoryEffect();
+                break;
+            case Tie:
+                resultLabel.setText("It's a tie!");
+                break;
+            default:
+                resultLabel.setText("You lost!");
+                break;
+        }
+
         playAgainButton.setOnAction(e-> {
+            Model.getInstance().gameResult = GameResult.Loss;
             closeResults();
         });
         mainMenuButton.setOnAction(e->{
@@ -53,7 +70,9 @@ public class ResultController implements Initializable {
             circle.setOpacity(Math.random() * 0.5 + 0.1);
             circle.setEffect(new GaussianBlur(Math.random() * 15 + 5));
 
-            resultRoot.getChildren().add(circle);
+            circle.setMouseTransparent(true);
+
+            resultRoot.getChildren().add(0,circle);
         }
     }
 
