@@ -45,15 +45,15 @@
                   <RowConstraints percentHeight="32.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.rowIndex="2" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.rowIndex="4" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                  <Pane fx:id="cell0" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" />
+                  <Pane fx:id="cell1" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" />
+                  <Pane fx:id="cell2" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" />
+                  <Pane fx:id="cell3" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.rowIndex="2" />
+                  <Pane fx:id="cell4" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Pane fx:id="cell5" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <Pane fx:id="cell6" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.rowIndex="4" />
+                  <Pane fx:id="cell7" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Pane fx:id="cell8" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #131516;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                   <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #000000;" GridPane.columnIndex="3" />
                   <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" />
                   <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
