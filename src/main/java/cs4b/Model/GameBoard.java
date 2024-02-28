@@ -1,6 +1,6 @@
 package cs4b.Model;
 
-import cs4b.GameResult;
+import cs4b.config.GameResult;
 
 public class GameBoard {
     private char[][] gameBoard = new char[3][3];
@@ -53,7 +53,7 @@ public class GameBoard {
 
         if (isBoardFull()) {
             winner = 't';
-            Model.getInstance().gameResult = GameResult.Tie;
+            Model.getInstance().gameResult = GameResult.TIE;
         }
 
         return winner;

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import cs4b.GameResult;
+import cs4b.config.*;
 import cs4b.Model.Model;
 import cs4b.Model.Observer;
 import javafx.fxml.FXML;
@@ -44,10 +44,10 @@ public class BoardController implements Initializable, Observer {
             openMenu();
         });
 
-        Model.getInstance().registerObserver("PlayerTurn", this);
-        Model.getInstance().registerObserver("Player2Move", this);
-        Model.getInstance().registerObserver("Win", this);
-        Model.getInstance().registerObserver("Tie", this);
+        Model.getInstance().registerObserver(Config.PLAYER_TURN, this);
+        Model.getInstance().registerObserver(Config.PLAYER2_MOVE, this);
+        Model.getInstance().registerObserver(Config.WIN, this);
+        Model.getInstance().registerObserver(Config.TIE, this);
 
         handleBoardRescale();
 
@@ -55,9 +55,9 @@ public class BoardController implements Initializable, Observer {
             Pane pane = (Pane) gameBoardGrid.lookup("#cell" + i);
             if (pane != null) {
                 Image xMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                        "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hj-fullview.png")));
+                        Config.PLAYER1_MARKER_IMAGE)));
                 Image oMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                        "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hq-414w-2x.png")));
+                        Config.PLAYER2_MARKER_IMAGE)));
 
                 ImageView xMarkerView = createMarkerView(xMarkerImage);
                 ImageView oMarkerView = createMarkerView(oMarkerImage);
@@ -74,7 +74,7 @@ public class BoardController implements Initializable, Observer {
 
                 cells[i].setOnMouseClicked(event -> {
                     Model.getInstance().makeMove(moveIndex);
-                    if(Model.getInstance().getPlayer1Marker() ==  'x') {
+                    if(Model.getInstance().getPlayer1Marker() ==  Config.DEFAULT_PLAYER1_MARKER.charAt(0)) {
                         xMarkerView.setVisible(true);
                     } else {
                         oMarkerView.setVisible(true);
@@ -87,10 +87,10 @@ public class BoardController implements Initializable, Observer {
 
     @Override
     public void update(String eventType, Object data) {
-        if (data.equals('x')) {
-            Model.getInstance().gameResult = GameResult.Win;
-        } else if (data.equals('o')){
-            Model.getInstance().gameResult = GameResult.Loss;
+        if (data.equals(Config.DEFAULT_PLAYER1_MARKER.charAt(0))) {
+            Model.getInstance().gameResult = GameResult.WIN;
+        } else if (data.equals(Config.DEFAULT_PLAYER2_MARKER.charAt(0))){
+            Model.getInstance().gameResult = GameResult.LOSS;
         }
 
         switch (eventType) {
@@ -107,10 +107,10 @@ public class BoardController implements Initializable, Observer {
 
     private void openMenu() {
         Stage stage = (Stage)menuButton.getScene().getWindow();
-        Model.getInstance().removeObserver("PlayerTurn", this);
-        Model.getInstance().removeObserver("Player2Move", this);
-        Model.getInstance().removeObserver("Win", this);
-        Model.getInstance().removeObserver("Tie", this);
+        Model.getInstance().removeObserver(Config.PLAYER_TURN, this);
+        Model.getInstance().removeObserver(Config.PLAYER2_MOVE, this);
+        Model.getInstance().removeObserver(Config.WIN, this);
+        Model.getInstance().removeObserver(Config.TIE, this);
         Model.getInstance().getViewFactory().closeStage(stage);
 
         try {
@@ -121,10 +121,10 @@ public class BoardController implements Initializable, Observer {
     }
     private void openResult() {
         Stage stage = (Stage)menuButton.getScene().getWindow();
-        Model.getInstance().removeObserver("PlayerTurn", this);
-        Model.getInstance().removeObserver("Player2Move", this);
-        Model.getInstance().removeObserver("Win", this);
-        Model.getInstance().removeObserver("Tie", this);
+        Model.getInstance().removeObserver(Config.PLAYER_TURN, this);
+        Model.getInstance().removeObserver(Config.PLAYER2_MOVE, this);
+        Model.getInstance().removeObserver(Config.WIN, this);
+        Model.getInstance().removeObserver(Config.TIE, this);
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
             Model.getInstance().getViewFactory().showResults();

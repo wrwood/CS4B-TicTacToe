@@ -1,7 +1,7 @@
 package cs4b.Controller;
 
-import cs4b.GameResult;
 import cs4b.Model.Model;
+import cs4b.config.GameResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,11 +36,11 @@ public class ResultController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         switch (Model.getInstance().gameResult) {
-            case Win:
+            case WIN:
                 resultLabel.setText("You won!");
                 VictoryEffect();
                 break;
-            case Tie:
+            case TIE:
                 resultLabel.setText("It's a tie!");
                 break;
             default:
@@ -49,7 +49,7 @@ public class ResultController implements Initializable {
         }
 
         playAgainButton.setOnAction(e-> {
-            Model.getInstance().gameResult = GameResult.Loss;
+            Model.getInstance().gameResult = GameResult.LOSS;
             closeResults();
         });
         mainMenuButton.setOnAction(e->{

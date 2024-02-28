@@ -1,6 +1,6 @@
 package cs4b.Model;
 
-import cs4b.GameResult;
+import cs4b.config.*;
 import cs4b.Views.ViewFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class Model {
     private Boolean isPlayer2Turn;
     private char player1Marker;
     private char player2Marker;
-    private String gameMode;
+    private GameModes gameMode;
 
     public GameResult gameResult;
 
@@ -27,9 +27,9 @@ public class Model {
         this.viewFactory = new ViewFactory();
         isPlayer1Turn = true;
         isPlayer2Turn = false;
-        player1Marker = 'x';
-        player2Marker = 'o';
-        gameMode = "SinglePlayer";
+        player1Marker = Config.DEFAULT_PLAYER1_MARKER.charAt(0);
+        player2Marker = Config.DEFAULT_PLAYER2_MARKER.charAt(0);
+        gameMode = Config.DEFAULT_GAME_MODE;
 
         gameBoard = new GameBoard();
     }
@@ -77,11 +77,11 @@ public class Model {
 
     private void otherPlayerMove() {
         switch (gameMode) {
-            case "SinglePlayer": computerMove();
+            case SINGLE_PLAYER: computerMove();
                 break;
-            case "OnlineMultiplayer":
+            case LOCAL_MULTIPLAYER:
                 break;
-            case "LocalMultiplayer":
+            case ONLINE_MULTIPLAYER:
                 break;
         }
 
@@ -94,20 +94,20 @@ public class Model {
 
     private void computerMove() {
         int computerMove = gameBoard.computerPlay(player2Marker);
-        notifyObservers("Player2Move", computerMove);
+        notifyObservers(Config.PLAYER2_MOVE, computerMove);
     }
 
     private void notifyGameStatus(char winner) {
         if (winner != ' ') {
-            notifyObservers("Win", winner);
+            notifyObservers(Config.WIN, winner);
             if (winner == 'x') {
-                gameResult = GameResult.Win;
+                gameResult = GameResult.WIN;
             } else if (winner =='o') {
-                gameResult = GameResult.Loss;
+                gameResult = GameResult.LOSS;
             }
         } else if (winner == 't') {
-            notifyObservers("Tie", null);
-            gameResult = GameResult.Tie;
+            notifyObservers(Config.TIE, null);
+            gameResult = GameResult.TIE;
         }
         gameBoard = new GameBoard();
     }
