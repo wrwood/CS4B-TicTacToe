@@ -97,21 +97,38 @@ public class GameBoard {
             winner = 't';
             Model.getInstance().gameResult = GameResult.TIE;
         }
-
-        for (int i = 0; i < 3; i++) {
-            if (checkEqual(gameBoard[i][0], gameBoard[i][1], gameBoard[i][2])) {
-                winner = gameBoard[i][0];
-                break;
+        else
+        {
+            for (int i = 0; i < 3; i++) {
+                if (checkEqual(gameBoard[i][0], gameBoard[i][1], gameBoard[i][2]))
+                {
+                    winner = gameBoard[i][0];
+                    Model.getInstance().setWinningLine(new int[]{i * 3, i * 3 + 1, i * 3 + 2});
+                    return winner;
+                }
+                if (checkEqual(gameBoard[0][i], gameBoard[1][i], gameBoard[2][i]))
+                {
+                    winner = gameBoard[0][i];
+                    Model.getInstance().setWinningLine(new int[]{i, i + 3, i + 6});
+                    return winner;
+                }
             }
-            if (checkEqual(gameBoard[0][i], gameBoard[1][i], gameBoard[2][i])) {
-                winner = gameBoard[0][i];
-                break;
+
+            if (checkEqual(gameBoard[0][0], gameBoard[1][1], gameBoard[2][2]))
+            {
+                winner = gameBoard[0][0];
+                Model.getInstance().setWinningLine(new int[]{0, 4, 8});
+            }
+            else if (checkEqual(gameBoard[0][2], gameBoard[1][1], gameBoard[2][0]))
+            {
+                winner = gameBoard[0][2];
+                Model.getInstance().setWinningLine(new int[]{2, 4, 6});
             }
         }
 
-        if (checkEqual(gameBoard[0][0], gameBoard[1][1], gameBoard[2][2]) ||
-                checkEqual(gameBoard[0][2], gameBoard[1][1], gameBoard[2][0])) {
-            winner = gameBoard[1][1];
+        if (winner == ' ')
+        {
+            Model.getInstance().setWinningLine(null);
         }
 
         return winner;

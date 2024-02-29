@@ -1,11 +1,11 @@
 package cs4b.Views;
 
-import javafx.fxml.FXML;
+import cs4b.config.Config;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -119,8 +119,7 @@ public class ViewFactory {
 
 // Helper Methods ==================================================
     private void createStage(FXMLLoader loader) throws IOException {
-        Scene scene = null;
-        scene = new Scene(loader.load());
+        Scene scene = new Scene(loader.load());
         URL styleSheetURL = getClass().getResource("/StyleSheet/darkMode.css");
         if(styleSheetURL != null) {
             scene.getStylesheets().add(styleSheetURL.toExternalForm());
@@ -130,6 +129,8 @@ public class ViewFactory {
 
         Stage stage = new Stage();
         stage.setScene(scene);
+
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(Config.PLAYER1_MARKER_IMAGE))));
         stage.setTitle("Tic Tac Toe");
         stage.show();
     }

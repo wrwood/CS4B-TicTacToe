@@ -27,6 +27,8 @@ public class Model {
     private char player2Marker;
     private char actingPlayerMarker;
 
+    int[] winningLine;
+
     private GameModes gameMode;
     public GameResult gameResult;
 
@@ -135,4 +137,10 @@ public class Model {
         return actingPlayerMarker;
     }
 
+    public int[] getWinningLine() {
+        return winningLine;
+    }
+    public void setWinningLine(int[] winningLine) {
+        this.winningLine = winningLine;
+    }
 }

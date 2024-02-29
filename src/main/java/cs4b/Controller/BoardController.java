@@ -8,9 +8,11 @@ import java.util.Objects;
 import cs4b.config.*;
 import cs4b.Model.Model;
 import cs4b.Model.Observer;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,9 +22,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,6 +43,7 @@ import java.util.ResourceBundle;
  */
 
 public class BoardController implements Initializable, Observer {
+
     private Pane[] cells = new Pane[9];
     Map<Pane, ImageView> cellToXMarkerViewMap = new HashMap<>();
     Map<Pane, ImageView> cellToOMarkerViewMap = new HashMap<>();
@@ -46,6 +51,7 @@ public class BoardController implements Initializable, Observer {
     @FXML private GridPane boardRoot;
     @FXML private BorderPane gameBoardParent;
     @FXML private GridPane gameBoardGrid;
+    @FXML private Pane overlayPane;
     @FXML private Button pauseButton;
 
     private Stage pauseMenu;
@@ -59,6 +65,8 @@ public class BoardController implements Initializable, Observer {
         registerObservers();
         handleBoardRescale();
         createBoardButtons();
+
+        overlayPane.setMouseTransparent(true);
     }
 
 
@@ -98,7 +106,7 @@ public class BoardController implements Initializable, Observer {
             case Config.PLAYER2_MOVE: cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
                                       cells[(int)data].setOnMouseClicked(null);
                 break;
-            case Config.GAME_OVER: openResult();
+            case Config.GAME_OVER: GameOverAnimation();
                 break;
         }
     }
@@ -204,7 +212,7 @@ public class BoardController implements Initializable, Observer {
                 pauseMenu.initStyle(StageStyle.TRANSPARENT);
             }
             Scene pauseMenuScene = new Scene(root);
-            pauseMenuScene.setFill(Color.TRANSPARENT); // For a transparent scene
+            pauseMenuScene.setFill(Color.TRANSPARENT);
             pauseMenu.setScene(pauseMenuScene);
 
             pauseMenu.showAndWait();
@@ -226,6 +234,46 @@ public class BoardController implements Initializable, Observer {
         }
     }
 
+    // GameOverAnimation ==================================================
+    private void GameOverAnimation() {
+        PauseTransition initialPause = new PauseTransition(Duration.seconds(0.5));
+
+        initialPause.setOnFinished(event -> {
+            int[] winningLine = Model.getInstance().getWinningLine();
+            if (winningLine != null) {
+                Line line = getLine(winningLine);
+
+                overlayPane.getChildren().add(line);
+
+                overlayPane.toFront();
+                gameBoardGrid.toBack();
+
+                PauseTransition showLinePause = new PauseTransition(Duration.seconds(2));
+                showLinePause.setOnFinished(e -> openResult());
+                showLinePause.play();
+            } else {
+                openResult();
+            }
+        });
+        initialPause.play();
+    }
+
+    private Line getLine(int[] winningLine) {
+        Point2D startPoint = cells[winningLine[0]].localToScene(cells[winningLine[0]].getWidth() / 2, cells[winningLine[0]].getHeight() / 2);
+        Point2D endPoint = cells[winningLine[2]].localToScene(cells[winningLine[2]].getWidth() / 2, cells[winningLine[2]].getHeight() / 2);
+
+        Point2D overlayStart = overlayPane.sceneToLocal(startPoint);
+        Point2D overlayEnd = overlayPane.sceneToLocal(endPoint);
+
+        // Debug
+        //System.out.println("Start: " + overlayStart + ", End: " + overlayEnd);
+
+        Line line = new Line(overlayStart.getX(), overlayStart.getY(), overlayEnd.getX(), overlayEnd.getY());
+        line.setStrokeWidth(5);
+        line.setStroke(Color.RED);
+
+        return line;
+    }
 
     // SwapStage ==================================================
     private void openMenu() {
