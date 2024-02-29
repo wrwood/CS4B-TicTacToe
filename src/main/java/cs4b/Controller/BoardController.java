@@ -9,14 +9,21 @@ import cs4b.config.*;
 import cs4b.Model.Model;
 import cs4b.Model.Observer;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -27,6 +34,7 @@ import java.util.ResourceBundle;
     ObververMethods    Handles registration, removal, and updates of events 
     Rescaling          Scales components 
     ButtonCreation     Creates and assigns actions to buttons
+    Pause              pausebutton needs
     SwapStage          Will close board and open new stages 
  */
 
@@ -35,28 +43,25 @@ public class BoardController implements Initializable, Observer {
     Map<Pane, ImageView> cellToXMarkerViewMap = new HashMap<>();
     Map<Pane, ImageView> cellToOMarkerViewMap = new HashMap<>();
 
-    @FXML
-    private GridPane boardRoot;
+    @FXML private GridPane boardRoot;
+    @FXML private BorderPane gameBoardParent;
+    @FXML private GridPane gameBoardGrid;
+    @FXML private Button pauseButton;
 
-    @FXML
-    private BorderPane gameBoardParent;
-
-    @FXML
-    private GridPane gameBoardGrid;
-
-    @FXML
-    private Button menuButton;
+    private Stage pauseMenu;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        menuButton.setOnAction(e-> {
-            openMenu();
+        pauseButton.setOnAction(e-> {
+            pauseGame();
         });
 
         registerObservers();
         handleBoardRescale();
         createBoardButtons();
     }
+
+
 
     // TurnLogic ==================================================
     private void makePlayerMove(int moveIndex) { // When a board button is clicked 
@@ -183,10 +188,48 @@ public class BoardController implements Initializable, Observer {
         });
     }
 
+    // Pause ==================================================
+    private void pauseGame() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paused.fxml"));
+            Parent root = loader.load();
+
+            PausedController pauseMenuController = loader.getController();
+            pauseMenuController.setBoardController(this);
+
+            if (pauseMenu == null) {
+                pauseMenu = new Stage();
+                pauseMenu.initModality(Modality.APPLICATION_MODAL);
+                pauseMenu.initOwner(boardRoot.getScene().getWindow());
+                pauseMenu.initStyle(StageStyle.TRANSPARENT);
+            }
+            Scene pauseMenuScene = new Scene(root);
+            pauseMenuScene.setFill(Color.TRANSPARENT); // For a transparent scene
+            pauseMenu.setScene(pauseMenuScene);
+
+            pauseMenu.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeBoard() {
+        Stage stage = (Stage) pauseButton.getScene().getWindow();
+        unregisterObservers();
+        Model.getInstance().getViewFactory().closeStage(stage);
+    }
+
+    public void resumeGame() {
+        if (pauseMenu != null)
+        {
+            pauseMenu.hide();
+        }
+    }
+
 
     // SwapStage ==================================================
     private void openMenu() {
-        Stage stage = (Stage)menuButton.getScene().getWindow();
+        Stage stage = (Stage) pauseButton.getScene().getWindow();
         unregisterObservers();
         Model.getInstance().getViewFactory().closeStage(stage);
 
@@ -198,7 +241,7 @@ public class BoardController implements Initializable, Observer {
     }
     
     private void openResult() {
-        Stage stage = (Stage)menuButton.getScene().getWindow();
+        Stage stage = (Stage) pauseButton.getScene().getWindow();
         unregisterObservers();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
@@ -207,4 +250,6 @@ public class BoardController implements Initializable, Observer {
             throw new RuntimeException(ex);
         }
     }
+
+
 }

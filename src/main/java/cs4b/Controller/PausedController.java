@@ -14,16 +14,12 @@ import java.util.ResourceBundle;
 
 public class PausedController implements Initializable {
 
+    private BoardController boardController;
 
     public BorderPane pausedRoot;
-    @FXML
-    private Button exitGameButton;
-  
-    @FXML
-    private Button optionsButton;
-
-    @FXML
-    private Button resumeButton;
+    @FXML private Button exitGameButton;
+    @FXML private Button optionsButton;
+    @FXML private Button resumeButton;
 
     @FXML
     void exitProgram(ActionEvent event) {
@@ -35,31 +31,23 @@ public class PausedController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         resumeButton.setOnAction(e-> {
-            closeMenu();
-        });
-        optionsButton.setOnAction(e->{
-            openResults();
+            boardController.resumeGame();
         });
         exitGameButton.setOnAction(e->{
             System.exit(0);
         });
     }
+
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
+    }
+
     
     private void closeMenu() {
         Stage stage = (Stage)resumeButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
             Model.getInstance().getViewFactory().showBoard();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private void openResults() {
-        Stage stage = (Stage)optionsButton.getScene().getWindow();
-        Model.getInstance().getViewFactory().closeStage(stage);
-        try {
-            Model.getInstance().getViewFactory().showResults();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
