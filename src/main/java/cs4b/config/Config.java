@@ -9,8 +9,7 @@ public class Config {
     // Event Types
     public static final String PLAYER_TURN = "PlayerTurn";
     public static final String PLAYER2_MOVE = "Player2Move";
-    public static final String WIN = "Win";
-    public static final String TIE = "Tie";
+    public static final String GAME_OVER = "GameOver";
 
     // Image paths
     public static final String PLAYER1_MARKER_IMAGE = "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hj-fullview.png";

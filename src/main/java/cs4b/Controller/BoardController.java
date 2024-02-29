@@ -20,6 +20,16 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/*
+    Structured as
+
+    TurnLogic          Determines when players can take turns and when a win is determined and handled
+    ObververMethods    Handles registration, removal, and updates of events 
+    Rescaling          Scales components 
+    ButtonCreation     Creates and assigns actions to buttons
+    SwapStage          Will close board and open new stages 
+ */
+
 public class BoardController implements Initializable, Observer {
     private Pane[] cells = new Pane[9];
     Map<Pane, ImageView> cellToXMarkerViewMap = new HashMap<>();
@@ -39,119 +49,70 @@ public class BoardController implements Initializable, Observer {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         menuButton.setOnAction(e-> {
             openMenu();
         });
 
-        Model.getInstance().registerObserver(Config.PLAYER_TURN, this);
-        Model.getInstance().registerObserver(Config.PLAYER2_MOVE, this);
-        Model.getInstance().registerObserver(Config.WIN, this);
-        Model.getInstance().registerObserver(Config.TIE, this);
-
+        registerObservers();
         handleBoardRescale();
+        createBoardButtons();
+    }
 
-        for (int i = 0; i < 9; i++) {
-            Pane pane = (Pane) gameBoardGrid.lookup("#cell" + i);
-            if (pane != null) {
-                Image xMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                        Config.PLAYER1_MARKER_IMAGE)));
-                Image oMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(
-                        Config.PLAYER2_MARKER_IMAGE)));
+    // TurnLogic ==================================================
+    private void makePlayerMove(int moveIndex) { // When a board button is clicked 
+        Model.getInstance().makeMove(moveIndex);
 
-                ImageView xMarkerView = createMarkerView(xMarkerImage);
-                ImageView oMarkerView = createMarkerView(oMarkerImage);
-
-                cells[i] = pane;
-
-                setupMarkerView(xMarkerView, cells[i]);
-                setupMarkerView(oMarkerView, cells[i]);
-
-                cellToOMarkerViewMap.put(cells[i], xMarkerView);
-                cellToOMarkerViewMap.put(cells[i], oMarkerView);
-
-                int moveIndex = i;
-
-                cells[i].setOnMouseClicked(event -> {
-                    Model.getInstance().makeMove(moveIndex);
-                    if(Model.getInstance().getPlayer1Marker() ==  Config.DEFAULT_PLAYER1_MARKER.charAt(0)) {
-                        xMarkerView.setVisible(true);
-                    } else {
-                        oMarkerView.setVisible(true);
-                    }
-                    cells[moveIndex].setOnMouseClicked(null);
-                });
-            }
+        // If the game is not over moves to the next player turn 
+        if(Model.getInstance().isGameOver()) {     
+            Model.getInstance().handleGameOver();
+        } else {
+            Model.getInstance().switchPlayerTurn();
+            makeOtherPlayerMove();
         }
     }
 
+    private void makeOtherPlayerMove() {
+        Model.getInstance().getOtherPlayerMove();
+
+        // If the game is not over switches active players to allow for access to board buttons
+        if(Model.getInstance().isGameOver()) {
+            Model.getInstance().handleGameOver();
+        } else {
+            Model.getInstance().switchPlayerTurn();
+        }
+    }
+
+    // ObserverMethods ==================================================
     @Override
     public void update(String eventType, Object data) {
-        if (data.equals(Config.DEFAULT_PLAYER1_MARKER.charAt(0))) {
-            Model.getInstance().gameResult = GameResult.WIN;
-        } else if (data.equals(Config.DEFAULT_PLAYER2_MARKER.charAt(0))){
-            Model.getInstance().gameResult = GameResult.LOSS;
-        }
-
         switch (eventType) {
-            case "PlayerTurn":
+            // When it is the players turn allows for access to board buttons 
+            case Config.PLAYER_TURN: gameBoardGrid.setDisable(false); 
                 break;
-            case "Player2Move": cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
-                cells[(int)data].setOnMouseClicked(null);
+            // Receives Player2's move and places marker while disabling the click event 
+            case Config.PLAYER2_MOVE: cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
+                                      cells[(int)data].setOnMouseClicked(null);
                 break;
-            case "Win": openResult();
+            case Config.GAME_OVER: openResult();
                 break;
-            case "Tie": openResult();
         }
     }
 
-    private void openMenu() {
-        Stage stage = (Stage)menuButton.getScene().getWindow();
+    private void registerObservers() {
+        Model.getInstance().registerObserver(Config.PLAYER_TURN, this);
+        Model.getInstance().registerObserver(Config.PLAYER2_MOVE, this);
+        Model.getInstance().registerObserver(Config.GAME_OVER, this);
+    }
+
+    private void unregisterObservers() {
         Model.getInstance().removeObserver(Config.PLAYER_TURN, this);
         Model.getInstance().removeObserver(Config.PLAYER2_MOVE, this);
-        Model.getInstance().removeObserver(Config.WIN, this);
-        Model.getInstance().removeObserver(Config.TIE, this);
-        Model.getInstance().getViewFactory().closeStage(stage);
-
-        try {
-            Model.getInstance().getViewFactory().showPaused();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-    private void openResult() {
-        Stage stage = (Stage)menuButton.getScene().getWindow();
-        Model.getInstance().removeObserver(Config.PLAYER_TURN, this);
-        Model.getInstance().removeObserver(Config.PLAYER2_MOVE, this);
-        Model.getInstance().removeObserver(Config.WIN, this);
-        Model.getInstance().removeObserver(Config.TIE, this);
-        Model.getInstance().getViewFactory().closeStage(stage);
-        try {
-            Model.getInstance().getViewFactory().showResults();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        Model.getInstance().removeObserver(Config.GAME_OVER, this);
     }
 
-    private ImageView createMarkerView(Image image) {
-        ImageView markerView = new ImageView(image);
-        markerView.setVisible(false);
-        return markerView;
-    }
-
-    private void setupMarkerView(ImageView markerView, Pane cell) {
-        // moves image to the center of the cell
-        markerView.layoutXProperty().bind(cell.widthProperty().divide(10));
-        markerView.layoutYProperty().bind(cell.heightProperty().divide(120));
-        // keeps image ratio (1280 x 1630)
-        markerView.fitWidthProperty().bind(cell.widthProperty().divide(1.273));
-        markerView.fitHeightProperty().bind(cell.heightProperty());
-
-        cell.getChildren().add(markerView);
-    }
-
+    // Rescaling ==================================================
     private void handleBoardRescale() {
-        // keeps a 1 to 1 ratio when scaling the game board
+        // Keeps a 1 to 1 ratio when scaling the game board
         gameBoardParent.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             double size = Math.min(newWidth.doubleValue(), gameBoardParent.getHeight());
             gameBoardGrid.setMaxWidth(size);
@@ -162,5 +123,88 @@ public class BoardController implements Initializable, Observer {
             gameBoardGrid.setMaxWidth(size);
             gameBoardGrid.setMaxHeight(size);
         });
+    }
+
+    // ButtonCreation ==================================================
+    private void createBoardButtons() {
+        for (int i = 0; i < 9; i++) {
+            Pane pane = (Pane) gameBoardGrid.lookup("#cell" + i);
+            if (pane != null) {
+                Image xMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(Config.PLAYER1_MARKER_IMAGE)));
+                Image oMarkerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(Config.PLAYER2_MARKER_IMAGE)));
+
+                ImageView xMarkerView = createMarkerView(xMarkerImage);
+                ImageView oMarkerView = createMarkerView(oMarkerImage);
+
+                cells[i] = pane;
+
+                setupMarkerView(xMarkerView, cells[i]);
+                setupMarkerView(oMarkerView, cells[i]);
+
+                // Maps markers and cells for later use 
+                cellToOMarkerViewMap.put(cells[i], xMarkerView);
+                cellToOMarkerViewMap.put(cells[i], oMarkerView);
+
+                setUpCellClickEvent(i, xMarkerView, oMarkerView);
+            }
+        }
+    }
+
+    private ImageView createMarkerView(Image image) {
+        ImageView markerView = new ImageView(image);
+        markerView.setVisible(false);
+        return markerView;
+    }
+
+    private void setupMarkerView(ImageView markerView, Pane cell) {
+        // Moves image to the center of the cell
+        markerView.layoutXProperty().bind(cell.widthProperty().divide(10));
+        markerView.layoutYProperty().bind(cell.heightProperty().divide(120));
+        // Keeps image ratio (1280 x 1630)
+        markerView.fitWidthProperty().bind(cell.widthProperty().divide(1.273));
+        markerView.fitHeightProperty().bind(cell.heightProperty());
+
+        cell.getChildren().add(markerView);
+    }
+
+    private void setUpCellClickEvent (int i, ImageView xMarkerView, ImageView oMarkerView) {
+        cells[i].setOnMouseClicked(event -> {
+            // Sets the correct marker of the active player to visible
+            if(Model.getInstance().getActingPlayerMarker() == 'x') {
+                xMarkerView.setVisible(true);
+            } else {
+                oMarkerView.setVisible(true);
+            }
+
+            cells[i].setOnMouseClicked(null);
+            gameBoardGrid.setDisable(true);
+
+            makePlayerMove(i);
+        });
+    }
+
+
+    // SwapStage ==================================================
+    private void openMenu() {
+        Stage stage = (Stage)menuButton.getScene().getWindow();
+        unregisterObservers();
+        Model.getInstance().getViewFactory().closeStage(stage);
+
+        try {
+            Model.getInstance().getViewFactory().showPaused();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    private void openResult() {
+        Stage stage = (Stage)menuButton.getScene().getWindow();
+        unregisterObservers();
+        Model.getInstance().getViewFactory().closeStage(stage);
+        try {
+            Model.getInstance().getViewFactory().showResults();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

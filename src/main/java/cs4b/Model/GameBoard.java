@@ -35,6 +35,11 @@ public class GameBoard {
     public char checkWin() {
         char winner = ' ';
 
+        if (isBoardFull()) {
+            winner = 't';
+            Model.getInstance().gameResult = GameResult.TIE;
+        }
+
         for (int i = 0; i < 3; i++) {
             if (checkEqual(gameBoard[i][0], gameBoard[i][1], gameBoard[i][2])) {
                 winner = gameBoard[i][0];
@@ -49,11 +54,6 @@ public class GameBoard {
         if (checkEqual(gameBoard[0][0], gameBoard[1][1], gameBoard[2][2]) ||
                 checkEqual(gameBoard[0][2], gameBoard[1][1], gameBoard[2][0])) {
             winner = gameBoard[1][1];
-        }
-
-        if (isBoardFull()) {
-            winner = 't';
-            Model.getInstance().gameResult = GameResult.TIE;
         }
 
         return winner;
