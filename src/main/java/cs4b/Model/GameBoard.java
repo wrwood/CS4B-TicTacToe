@@ -21,15 +21,73 @@ public class GameBoard {
     }
 
     public int computerPlay(char marker) {
+        int bestScore = Integer.MAX_VALUE;
+        int bestMove = -1;
+        char otherMarker = getOtherMarker(marker);
+
         for (int row = 0; row < 3; row++) {
-            for(int col = 0; col < 3; col++) {
-                if(gameBoard[row][col] == ' ') {
+            for (int col = 0; col < 3; col++) {
+                if (gameBoard[row][col] == ' ') {
                     gameBoard[row][col] = marker;
-                    return row * 3 + col;
+                    int score = minimax(0, true, Integer.MIN_VALUE, Integer.MAX_VALUE, marker, otherMarker);
+                    gameBoard[row][col] = ' ';
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMove = row * 3 + col;
+                    }
                 }
             }
         }
-        return 0;
+
+        placeMarker(bestMove, marker);
+        return bestMove;
+    }
+
+    private int minimax(int depth, boolean isMaximizing, int alpha, int beta, char computerMarker, char otherMarker) {
+        char winner = checkWin();
+        if (winner == otherMarker) {
+            return 1;
+        } else if (winner == computerMarker) {
+            return -1;
+        } else if (winner == 't') {
+            return 0;
+        }
+
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 3; col++) {
+                    if (gameBoard[row][col] == ' ') {
+                        gameBoard[row][col] = otherMarker; 
+                        int score = minimax(depth + 1, false, alpha, beta, computerMarker, otherMarker);
+                        gameBoard[row][col] = ' '; 
+                        bestScore = Math.max(score, bestScore);                        
+                        alpha = Math.max(alpha, bestScore);
+                        if (beta <= alpha) {
+                            break;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 3; col++) {
+                    if (gameBoard[row][col] == ' ') {
+                        gameBoard[row][col] = computerMarker;  
+                        int score = minimax(depth + 1, true, alpha, beta, computerMarker, otherMarker);
+                        gameBoard[row][col] = ' '; 
+                        bestScore = Math.min(score, bestScore);
+                        beta = Math.min(beta, bestScore);
+                        if (beta <= alpha) {
+                            break; 
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
     }
 
     public char checkWin() {
@@ -72,6 +130,14 @@ public class GameBoard {
             }
         }
         return true;
+    }
+
+    public char getOtherMarker(char marker) {
+        if(marker == 'x') {
+            return 'o';
+        } else {
+            return 'x';
+        }
     }
 }
 

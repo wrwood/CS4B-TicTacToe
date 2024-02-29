@@ -32,8 +32,7 @@ public class Model {
 
     private GameBoard gameBoard;
 
-    private Model()
-    {
+    private Model() {
         observersMap = new HashMap<>();
         this.viewFactory = new ViewFactory();
         isPlayer1Turn = true;
