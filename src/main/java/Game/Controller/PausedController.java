@@ -1,6 +1,6 @@
-package cs4b.Controller;
+package Game.Controller;
 
-import cs4b.Model.Model;
+import Game.Model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

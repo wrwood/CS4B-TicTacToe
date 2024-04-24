@@ -1,7 +1,7 @@
-package cs4b.Model;
+package Game.Model;
 
-import cs4b.config.*;
-import cs4b.Views.ViewFactory;
+import Game.config.*;
+import Game.Views.ViewFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

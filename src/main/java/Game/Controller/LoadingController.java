@@ -1,4 +1,4 @@
-package cs4b.Controller;
+package Game.Controller;
 
 import javafx.animation.RotateTransition;
 import javafx.fxml.Initializable;

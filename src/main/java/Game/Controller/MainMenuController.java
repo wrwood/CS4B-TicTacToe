@@ -1,12 +1,10 @@
-package cs4b.Controller;
+package Game.Controller;
 
-import cs4b.Model.Model;
+import Game.Model.Model;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
@@ -18,7 +16,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;

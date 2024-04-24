@@ -1,13 +1,13 @@
-package cs4b.Controller;
+package Game.Controller;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import cs4b.config.*;
-import cs4b.Model.Model;
-import cs4b.Model.Observer;
+import Game.config.*;
+import Game.Model.Model;
+import Game.Model.Observer;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,11 +35,11 @@ import java.util.ResourceBundle;
     Structured as
 
     TurnLogic          Determines when players can take turns and when a win is determined and handled
-    ObververMethods    Handles registration, removal, and updates of events 
-    Rescaling          Scales components 
+    ObserverMethods    Handles registration, removal, and updates of events
+    Rescaling          Scales components
     ButtonCreation     Creates and assigns actions to buttons
-    Pause              pausebutton needs
-    SwapStage          Will close board and open new stages 
+    Pause              pauseButton needs
+    SwapStage          Will close board and open new stages
  */
 
 public class BoardController implements Initializable, Observer {

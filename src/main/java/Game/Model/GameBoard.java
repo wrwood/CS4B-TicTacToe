@@ -1,6 +1,6 @@
-package cs4b.Model;
+package Game.Model;
 
-import cs4b.config.GameResult;
+import Game.config.GameResult;
 
 public class GameBoard {
     private char[][] gameBoard = new char[3][3];

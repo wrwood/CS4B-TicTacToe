@@ -1,4 +1,4 @@
-package cs4b.config;
+package Game.config;
 
 public enum GameModes {
     SINGLE_PLAYER,

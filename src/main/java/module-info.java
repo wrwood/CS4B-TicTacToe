@@ -2,8 +2,12 @@ module cs4b {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens cs4b to javafx.fxml;
-    exports cs4b;
-    exports cs4b.Controller;
-    opens cs4b.Controller to javafx.fxml;
+    opens Game to javafx.fxml;
+    opens GameServer to javafx.fxml;
+    exports Game;
+    exports Game.Controller;
+    exports GameServer;
+    exports GameServer.Controller;
+    opens Game.Controller to javafx.fxml;
+    opens GameServer.Controller to javafx.fxml;
 }
