@@ -1,5 +1,7 @@
 package Game.Controller;
 
+import Game.Controller.Board.BoardController;
+import Game.Controller.Board.ChatAndOptionsController;
 import Game.Model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +16,8 @@ import java.util.ResourceBundle;
 
 public class PausedController implements Initializable {
 
-    private BoardController boardController;
+    private ChatAndOptionsController boardController;
+    private ChatAndOptionsController chatAndOptionsController;
 
     public BorderPane pausedRoot;
     @FXML private Button exitGameButton;
@@ -30,15 +33,16 @@ public class PausedController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         resumeButton.setOnAction(e-> {
-            boardController.resumeGame();
+            //resumeGame();
         });
         exitGameButton.setOnAction(e->{
             System.exit(0);
         });
     }
 
-    public void setBoardController(BoardController boardController) {
+    public void setBoardController(ChatAndOptionsController boardController) {
         this.boardController = boardController;
     }
 

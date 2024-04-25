@@ -196,7 +196,7 @@ public class MainMenuController implements Initializable {
         Stage stage = (Stage)singlePlayerButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
-            Model.getInstance().getViewFactory().showBoard();
+            Model.getInstance().getViewFactory().showGameWindow();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

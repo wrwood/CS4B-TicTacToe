@@ -1,7 +1,7 @@
 package Game.Controller;
 
 import Game.Model.Model;
-import Game.config.GameResult;
+import Game.Util.GameResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

@@ -1,7 +1,14 @@
 package Game.Model;
 
-import Game.config.*;
+import Game.Util.*;
 import Game.Views.ViewFactory;
+import javafx.application.Platform;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +33,10 @@ public class Model {
     private char player1Marker;
     private char player2Marker;
     private char actingPlayerMarker;
+
+    private PrintWriter out;
+    private Socket socket;
+    private BufferedReader serverIn;
 
     int[] winningLine;
 
@@ -142,5 +153,63 @@ public class Model {
     }
     public void setWinningLine(int[] winningLine) {
         this.winningLine = winningLine;
+    }
+
+    public void connectToServer(String serverAddress, int port) {
+        Thread serverThread = new Thread(() -> {
+            try {
+                socket = new Socket(serverAddress, port);
+                notifyObservers("event", "Connected to server on port " + port);
+
+                serverIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream(), true);
+
+                Thread receiveMessagesThread = new Thread(() -> {
+                    try {
+                        String serverResponse;
+                        while ((serverResponse = serverIn.readLine()) != null) {
+                            final String response = serverResponse;
+                            Platform.runLater(() -> {
+                                if (response.equals("gameStart")) {
+                                    notifyObservers("gameStart", "gameStart");
+                                }
+                                notifyObservers("message", response);
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                receiveMessagesThread.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        serverThread.start();
+    }
+
+    public void disconnectFromServer() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (serverIn != null) {
+                serverIn.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            notifyObservers("event", "Disconnected from server");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String message) {
+        if (out != null) {
+            out.println(message);
+        } else {
+            System.err.println("Error: PrintWriter not initialized.");
+        }
     }
 }

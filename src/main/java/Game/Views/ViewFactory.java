@@ -1,6 +1,8 @@
 package Game.Views;
 
-import Game.config.Config;
+import Game.Controller.Board.GameController;
+import Game.Controller.MainMenuController;
+import Game.Util.Config;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -49,7 +51,7 @@ public class ViewFactory {
     {
         if (board == null) {
             try {
-                board = new FXMLLoader(getClass().getResource("/fxml/board.fxml")).load();
+                board = new FXMLLoader(getClass().getResource("/fxml/Board/Board.fxml")).load();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -93,12 +95,20 @@ public class ViewFactory {
 // ShowPane ==================================================
     public void showMainMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainMenu.fxml"));
+        MainMenuController controller = new MainMenuController();
+        loader.setController(controller);
+        createStage(loader);
+    }
 
+    public void showGameWindow() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Board/Game.fxml"));
+        GameController gameController = new GameController();
+        loader.setController(gameController);
         createStage(loader);
     }
 
     public void showBoard() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/board.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Board/Game.fxml"));
         createStage(loader);
     }
 

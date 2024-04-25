@@ -1,11 +1,12 @@
-package Game.Controller;
+package Game.Controller.Board;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import Game.config.*;
+import Game.Controller.PausedController;
+import Game.Util.*;
 import Game.Model.Model;
 import Game.Model.Observer;
 import javafx.animation.PauseTransition;
@@ -52,15 +53,13 @@ public class BoardController implements Initializable, Observer {
     @FXML private BorderPane gameBoardParent;
     @FXML private GridPane gameBoardGrid;
     @FXML private Pane overlayPane;
-    @FXML private Button pauseButton;
 
-    private Stage pauseMenu;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        pauseButton.setOnAction(e-> {
-            pauseGame();
-        });
+
 
         registerObservers();
         handleBoardRescale();
@@ -196,43 +195,6 @@ public class BoardController implements Initializable, Observer {
         });
     }
 
-    // Pause ==================================================
-    private void pauseGame() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paused.fxml"));
-            Parent root = loader.load();
-
-            PausedController pauseMenuController = loader.getController();
-            pauseMenuController.setBoardController(this);
-
-            if (pauseMenu == null) {
-                pauseMenu = new Stage();
-                pauseMenu.initModality(Modality.APPLICATION_MODAL);
-                pauseMenu.initOwner(boardRoot.getScene().getWindow());
-                pauseMenu.initStyle(StageStyle.TRANSPARENT);
-            }
-            Scene pauseMenuScene = new Scene(root);
-            pauseMenuScene.setFill(Color.TRANSPARENT);
-            pauseMenu.setScene(pauseMenuScene);
-
-            pauseMenu.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void closeBoard() {
-        Stage stage = (Stage) pauseButton.getScene().getWindow();
-        unregisterObservers();
-        Model.getInstance().getViewFactory().closeStage(stage);
-    }
-
-    public void resumeGame() {
-        if (pauseMenu != null)
-        {
-            pauseMenu.hide();
-        }
-    }
 
     // GameOverAnimation ==================================================
     private void GameOverAnimation() {
@@ -277,7 +239,7 @@ public class BoardController implements Initializable, Observer {
 
     // SwapStage ==================================================
     private void openMenu() {
-        Stage stage = (Stage) pauseButton.getScene().getWindow();
+        Stage stage = (Stage) boardRoot.getScene().getWindow();
         unregisterObservers();
         Model.getInstance().getViewFactory().closeStage(stage);
 
@@ -289,7 +251,7 @@ public class BoardController implements Initializable, Observer {
     }
     
     private void openResult() {
-        Stage stage = (Stage) pauseButton.getScene().getWindow();
+        Stage stage = (Stage) boardRoot.getScene().getWindow();
         unregisterObservers();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
@@ -297,6 +259,27 @@ public class BoardController implements Initializable, Observer {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private void createStage(FXMLLoader loader) throws IOException {
+        Scene scene = new Scene(loader.load());
+        URL styleSheetURL = getClass().getResource("/StyleSheet/darkMode.css");
+        if(styleSheetURL != null) {
+            scene.getStylesheets().add(styleSheetURL.toExternalForm());
+        } else {
+            System.out.println("Stylesheet not found.");
+        }
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(Config.PLAYER1_MARKER_IMAGE))));
+        stage.setTitle("Tic Tac Toe");
+        stage.show();
+    }
+
+    public void closeStage(Stage stage){
+        stage.close();
     }
 
 

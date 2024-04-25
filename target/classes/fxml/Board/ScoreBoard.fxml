@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.Controller.Board.ScoreBoardController">
+    <VBox  GridPane.rowIndex="1">
+       <VBox fx:id="MoveTimer" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+           <AnchorPane prefHeight="154.0" prefWidth="400.0" stylesheets="@../../StyleSheet/darkMode.css" VBox.vgrow="ALWAYS">
+               <Pane layoutX="91.0" layoutY="82.0" prefHeight="45.0" prefWidth="89.0" style="-fx-background-color: black;">
+                   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" prefHeight="45.0" prefWidth="76.0" style="-fx-background-color: black;" text="0">
+                       <font>
+                           <Font size="28.0" />
+                       </font>
+                   </Label>
+               </Pane>
+               <ImageView fitHeight="79.0" fitWidth="228.0" layoutX="39.0" pickOnBounds="true" preserveRatio="true">
+                   <Image url="@../../images/MoveTimerImg.png" />
+               </ImageView>
+           </AnchorPane>
+       </VBox>
+        <VBox alignment="TOP_CENTER">
+            <ImageView fitHeight="110.0" fitWidth="246.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../images/ScoreBoardImg.png" />
+            </ImageView>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey;">
+                <Pane layoutX="19.0" prefHeight="425.0" prefWidth="228.0" style="-fx-background-color: #131516;">
+                    <Pane layoutX="49.0" layoutY="59.0" prefHeight="45.0" prefWidth="117.0" style="-fx-background-color: #131516;" />
+                    <Pane layoutX="48.0" layoutY="194.0" prefHeight="45.0" prefWidth="117.0" style="-fx-background-color: #131516;" />
+                    <Pane layoutX="50.0" layoutY="352.0" prefHeight="45.0" prefWidth="117.0" style="-fx-background-color: #131516;">
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="14.0" prefHeight="45.0" prefWidth="55.0" text="0">
+                            <font>
+                                <Font size="28.0" />
+                            </font>
+                        </Label>
+                    </Pane>
+                    <ImageView fitHeight="85.0" fitWidth="200.0" layoutX="6.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../images/Player1Img.png" />
+                    </ImageView>
+                    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="79.0" layoutY="91.0" prefHeight="45.0" prefWidth="55.0" style="-fx-background-color: #131516;" text="0">
+                        <font>
+                            <Font size="28.0" />
+                        </font>
+                    </Label>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="6.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../images/Player2Img.png" />
+                    </ImageView>
+                    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="80.0" layoutY="228.0" prefHeight="45.0" prefWidth="55.0" text="0">
+                        <font>
+                            <Font size="28.0" />
+                        </font>
+                    </Label>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="7.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../images/GamesTiedImg.png" />
+                    </ImageView>
+                </Pane>
+            </AnchorPane>
+        </VBox>
+    </VBox>
+</AnchorPane>

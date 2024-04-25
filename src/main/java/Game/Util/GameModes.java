@@ -1,4 +1,4 @@
-package Game.config;
+package Game.Util;
 
 public enum GameModes {
     SINGLE_PLAYER,

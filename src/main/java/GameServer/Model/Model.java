@@ -50,7 +50,12 @@ public class Model {
     
                         ClientHandler clientHandler = new ClientHandler(clientSocket);
                         clientHandler.start();
-                        clients.add(clientHandler);
+
+                        synchronized (clients) {
+                            clients.add(clientHandler);
+                            checkAndStartGame();
+                        }
+
                     } catch (IOException e) {
                         if (Thread.currentThread().isInterrupted()) {
                             break;
@@ -93,6 +98,21 @@ public class Model {
         notifyObservers("message", "Server Stopped. ");
     }
 
+    public void broadcastMessage(String message) {
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                client.broadcastMessage(message);
+            }
+        }
+    }
+
+    private void checkAndStartGame() {
+        if (clients.size() == 2) {
+            notifyObservers("gameStart", "gameStart");
+            broadcastMessage("gameStart");
+        }
+    }
+
     public void registerObserver(String eventType, Observer observer) {
         observersMap.computeIfAbsent(eventType, k -> new ArrayList<>()).add(observer);
     }
@@ -114,6 +134,8 @@ public class Model {
         }
     }
 
+
+
     public ViewFactory getViewFactory() {
         return viewFactory;
     }
@@ -125,13 +147,18 @@ public class Model {
 
         public ClientHandler(Socket socket) {
             this.clientSocket = socket;
+            try {
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @Override
         public void run() {
             try {
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
+
 
                 String message;
                 while ((message = in.readLine()) != null && !Thread.currentThread().isInterrupted()) {

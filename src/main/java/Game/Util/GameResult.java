@@ -1,4 +1,4 @@
-package Game.config;
+package Game.Util;
 
 public enum GameResult {
     WIN,

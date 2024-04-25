@@ -10,4 +10,6 @@ module cs4b {
     exports GameServer.Controller;
     opens Game.Controller to javafx.fxml;
     opens GameServer.Controller to javafx.fxml;
+    exports Game.Controller.Board;
+    opens Game.Controller.Board to javafx.fxml;
 }

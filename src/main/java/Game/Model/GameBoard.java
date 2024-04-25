@@ -1,6 +1,6 @@
 package Game.Model;
 
-import Game.config.GameResult;
+import Game.Util.GameResult;
 
 public class GameBoard {
     private char[][] gameBoard = new char[3][3];
