@@ -4,7 +4,7 @@ import Game.Controller.PausedController;
 import Game.Model.Model;
 import Game.Model.Observer;
 import Game.Util.ChatManager;
-import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,17 +27,13 @@ import java.util.ResourceBundle;
 
 public class ChatAndOptionsController implements Initializable, Observer {
 
+    @FXML public TextFlow chatDisplay;
     @FXML private Pane scalePane;
     @FXML private ScrollPane scrollPane;
     @FXML private TextField chatInput;
     @FXML private Button sendButton;
-    @FXML private TextField PortEntry;
-    @FXML private TextField ServerIPEntry;
     @FXML private TextArea ChatTextField;
     @FXML private TextField SendMessageEntry;
-
-    @FXML
-    private Button StopButton;
 
     private ChatManager chatManager;
 
@@ -46,18 +42,9 @@ public class ChatAndOptionsController implements Initializable, Observer {
 
     private Stage pauseMenu;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        pauseButton.setOnAction(e-> {
-            pauseGame();
-        });
-
-    }
-
-
-
+    /*
     @FXML
-    private void sendMessage(ActionEvent event) {
+    private void sendMessage(Event event) {
         String messageString = SendMessageEntry.getText();
         Model.getInstance().sendMessage(messageString);
         SendMessageEntry.clear();
@@ -79,32 +66,18 @@ public class ChatAndOptionsController implements Initializable, Observer {
     @FXML
     private void handleServerDisconnect(ActionEvent event) {
         Model.getInstance().disconnectFromServer();
-    }
+    }*/
 
 
 
     @FXML
     private void sendMessage() {
         String text = chatInput.getText().trim();
+        chatManager.addMessage("Sender", text, Color.GREEN);
         if (!text.isEmpty()) {
             Model.getInstance().sendMessage(text);
             chatInput.clear();
         }
-    }
-
-    @FXML
-    public void initialize() {
-        Model.getInstance().registerObserver("message", this);
-        Model.getInstance().registerObserver("event", this);
-
-        TextFlow textFlow = new TextFlow();
-        textFlowInit(textFlow);
-
-        chatManager = new ChatManager(textFlow, scrollPane);
-        chatManager.addMessage("System", "Welcome to the chat, please join a server.", Color.RED);
-
-        sendButton.setOnAction(e -> sendMessage());
-        chatInput.setOnAction(e -> sendMessage());
     }
 
     @Override
@@ -121,6 +94,8 @@ public class ChatAndOptionsController implements Initializable, Observer {
         textFlow.prefHeightProperty().bind(scalePane.heightProperty());
 
         scrollPane.setContent(textFlow);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
     }
 
     // Pause ==================================================
@@ -159,5 +134,20 @@ public class ChatAndOptionsController implements Initializable, Observer {
         {
             pauseMenu.hide();
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Model.getInstance().registerObserver("message", this);
+        Model.getInstance().registerObserver("event", this);
+
+        TextFlow chatDisplay = new TextFlow();
+        textFlowInit(chatDisplay);
+
+        chatManager = new ChatManager(chatDisplay, scrollPane);
+        chatManager.addMessage("System", "Welcome to the chat, please join a server.", Color.RED);
+
+        sendButton.setOnAction(e -> sendMessage());
+        chatInput.setOnAction(e -> sendMessage());
     }
 }

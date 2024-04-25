@@ -101,7 +101,17 @@ public class Model {
     public void broadcastMessage(String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                client.broadcastMessage(message);
+                client.sendMessage(message);
+            }
+        }
+    }
+
+    public void broadcastMessage(String message, ClientHandler sender) {
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client != sender) {
+                    client.sendMessage(message);
+                }
             }
         }
     }
@@ -158,12 +168,10 @@ public class Model {
         @Override
         public void run() {
             try {
-
-
                 String message;
                 while ((message = in.readLine()) != null && !Thread.currentThread().isInterrupted()) {
                     notifyObservers("message", "Message Received: " + message);
-                    broadcastMessage(message);
+                    model.broadcastMessage(message, this);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -200,10 +208,8 @@ public class Model {
             }
         }
 
-        private void broadcastMessage(String message) {
-            for (ClientHandler client : clients) {
-                client.out.println(message);
-            }
+        public void sendMessage(String message) {
+            out.println(message);
         }
 
         public void disconnect() {
