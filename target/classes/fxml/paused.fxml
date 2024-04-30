@@ -29,6 +29,8 @@
          </font>
       </Text>
       <Button fx:id="resumeButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;" text="RESUME" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+
+          
          <font>
             <Font size="24.0" />
          </font>

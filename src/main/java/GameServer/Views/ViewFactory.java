@@ -37,7 +37,7 @@ public class ViewFactory {
         stage = new Stage();
         stage.setScene(scene);
 
-        stage.setTitle("Chat Server");
+        stage.setTitle("Game Server");
         stage.show();
     }
 

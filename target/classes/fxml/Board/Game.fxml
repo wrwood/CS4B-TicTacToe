@@ -8,7 +8,7 @@
         xmlns="http://javafx.com/javafx/13"
         xmlns:fx="http://javafx.com/fxml/1">
     <left>
-        <fx:include source="ScoreBoard.fxml" />
+        <fx:include source="scoreboardtest.fxml" />
     </left>
     <center>
         <fx:include source="Board.fxml" />
