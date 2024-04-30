@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\main",
+    "\\src\\main\\java",
+    "\\src\\main\\java\\Game",
+    "\\src\\main\\java\\GameServer",
+    "\\src\\main\\java\\Game\\Model",
+    "\\src\\main\\resources",
+    "\\target",
+    "\\target\\classes"
+  ],
+  "SelectedNode": "\\src\\main\\java\\module-info.java",
+  "PreviewInSolutionExplorer": false
+}
