@@ -34,6 +34,7 @@ public class ChatAndOptionsController implements Initializable, Observer {
     @FXML private Button sendButton;
     @FXML private TextArea ChatTextField;
     @FXML private TextField SendMessageEntry;
+    @FXML private Button quitButton;
 
     private ChatManager chatManager;
 
@@ -149,5 +150,8 @@ public class ChatAndOptionsController implements Initializable, Observer {
 
         sendButton.setOnAction(e -> sendMessage());
         chatInput.setOnAction(e -> sendMessage());
+        quitButton.setOnAction(e->{
+            System.exit(0);
+        });
     }
 }

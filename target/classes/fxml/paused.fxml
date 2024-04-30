@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -12,17 +14,33 @@
     <ColumnConstraints hgrow="SOMETIMES" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints percentHeight="25.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="35.0" vgrow="SOMETIMES" />
     <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints percentHeight="25.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="exitGameButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" text="EXIT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+         <image>
+            <Image url="@../../../../../../../CS4B-TicTacToe/src/main/resources/images/GamePausedImg.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="70.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+         <image>
+            <Image url="@../../../../../../../CS4B-TicTacToe/src/main/resources/images/ResumeImg.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="69.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+         <image>
+            <Image url="@../../../../../../../CS4B-TicTacToe/src/main/resources/images/ExitImg.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="resumeButton" mnemonicParsing="false" opacity="0.0" prefHeight="60.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;" text="RESUME" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
+      <Button fx:id="exitGameButton" mnemonicParsing="false" onAction="#exitProgram" opacity="0.0" prefHeight="60.0" prefWidth="140.0" text="EXIT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
       <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;" text="GAME PAUSED" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <font>
             <Font size="49.0" />
@@ -30,7 +48,7 @@
       </Text>
       <Button fx:id="resumeButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;" text="RESUME" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
 
-          
+
          <font>
             <Font size="24.0" />
          </font>
