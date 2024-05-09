@@ -2,10 +2,7 @@ package GameServer.Model;
 
 import GameServer.Views.ViewFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,15 +15,14 @@ public class Model {
     private ViewFactory viewFactory;
 
     private Map<String, List<Observer>> observersMap;
-    private List<ClientHandler> clients;
-    
-    private ServerSocket serverSocket;
+
     private Thread serverThread;
+    private ServerSocket serverSocket;
+    private MatchManager matchManager;
 
     private Model() {
         this.viewFactory = new ViewFactory();
         observersMap = new HashMap<>();
-        clients = new ArrayList<>();
     }
 
     public static synchronized Model getInstance()
@@ -37,89 +33,49 @@ public class Model {
         return model;
     }
 
-    public void startServer(int port) {
-        Thread serverThread = new Thread(() -> {
+    public void startServer(int serverPort) {
+        serverThread = new Thread(() -> {
             try {
-                serverSocket = new ServerSocket(port);
-                notifyObservers("message", "Server started on port " + port);
+                serverSocket = new ServerSocket(serverPort);
+                System.out.println("Server started on port " + serverPort);
+                matchManager = new MatchManager();
     
                 while (!Thread.currentThread().isInterrupted()) {
-                    try {
-                        Socket clientSocket = serverSocket.accept();
-                        notifyObservers("message", "New client connected: " + clientSocket);
-    
-                        ClientHandler clientHandler = new ClientHandler(clientSocket);
-                        clientHandler.start();
-
-                        synchronized (clients) {
-                            clients.add(clientHandler);
-                            checkAndStartGame();
-                        }
-
-                    } catch (IOException e) {
-                        if (Thread.currentThread().isInterrupted()) {
-                            break;
-                        }
-                        e.printStackTrace();
-                    }
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("New client connected: " + clientSocket);
+                    matchManager.addPlayer(clientSocket);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                try {
-                    if (serverSocket != null && !serverSocket.isClosed()) {
+                if (serverSocket != null && !serverSocket.isClosed()) {
+                    try {
                         serverSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         });
-        this.serverThread = serverThread;
         serverThread.start();
     }
     
-    public void stopServer() {
+    //TODO handle resource cleanup and match results when a player unexpectantly diconnects
+    public void stopServer() { 
         if (serverThread != null && serverThread.isAlive()) {
             serverThread.interrupt();
             try {
-                for (ClientHandler client : clients) {
-                    client.disconnect(); 
-                }
-                clients.clear();
+                matchManager.cleanup();
 
                 if (serverSocket != null && !serverSocket.isClosed()) {
                     serverSocket.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                matchManager = null;
+                notifyObservers("message", "Server Stopped. ");
             }
-        }
-        notifyObservers("message", "Server Stopped. ");
-    }
-
-    public void broadcastMessage(String message) {
-        synchronized (clients) {
-            for (ClientHandler client : clients) {
-                client.sendMessage(message);
-            }
-        }
-    }
-
-    public void broadcastMessage(String message, ClientHandler sender) {
-        synchronized (clients) {
-            for (ClientHandler client : clients) {
-                if (client != sender) {
-                    client.sendMessage(message);
-                }
-            }
-        }
-    }
-
-    private void checkAndStartGame() {
-        if (clients.size() == 2) {
-            notifyObservers("gameStart", "gameStart");
-            broadcastMessage("gameStart");
         }
     }
 
@@ -144,80 +100,7 @@ public class Model {
         }
     }
 
-
-
     public ViewFactory getViewFactory() {
         return viewFactory;
-    }
-
-    class ClientHandler extends Thread {
-        private Socket clientSocket;
-        private BufferedReader in;
-        private PrintWriter out;
-
-        public ClientHandler(Socket socket) {
-            this.clientSocket = socket;
-            try {
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void run() {
-            try {
-                String message;
-                while ((message = in.readLine()) != null && !Thread.currentThread().isInterrupted()) {
-                    notifyObservers("message", "Message Received: " + message);
-                    model.broadcastMessage(message, this);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (in != null) {
-                        in.close();
-                    }
-                    if (out != null) {
-                        out.close();
-                    }
-                    clientSocket.close();
-                    notifyObservers("message", "Client disconnected: " + clientSocket);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void close() {
-            try {
-                this.interrupt();
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-                if (clientSocket != null && !clientSocket.isClosed()) {
-                    clientSocket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void sendMessage(String message) {
-            out.println(message);
-        }
-
-        public void disconnect() {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

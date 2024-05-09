@@ -2,12 +2,18 @@ package Game.Model;
 
 import Game.Util.*;
 import Game.Views.ViewFactory;
+import GameServer.Model.MessageType;
+import GameServer.Model.Message;
 import javafx.application.Platform;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +40,10 @@ public class Model {
     private char player2Marker;
     private char actingPlayerMarker;
 
-    private PrintWriter out;
     private Socket socket;
-    private BufferedReader serverIn;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private int gamePort; 
 
     int[] winningLine;
 
@@ -156,36 +163,38 @@ public class Model {
     }
 
     public void connectToServer(String serverAddress, int port) {
-        Thread serverThread = new Thread(() -> {
-            try {
-                socket = new Socket(serverAddress, port);
-                notifyObservers("event", "Connected to server on port " + port);
+        try {
+            socket = new Socket(serverAddress, port);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
-                serverIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(socket.getOutputStream(), true);
-
-                Thread receiveMessagesThread = new Thread(() -> {
-                    try {
-                        String serverResponse;
-                        while ((serverResponse = serverIn.readLine()) != null) {
-                            final String response = serverResponse;
-                            Platform.runLater(() -> {
-                                if (response.equals("gameStart")) {
-                                    notifyObservers("gameStart", "gameStart");
-                                }
-                                notifyObservers("message", response);
-                            });
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            Thread receiveMessagesThread = new Thread(() -> {
+                try {
+                    Message receivedMessage;
+                    while ((receivedMessage = (Message) in.readObject()) != null) {
+                        handleMessage(receivedMessage);
                     }
-                });
-                receiveMessagesThread.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        serverThread.start();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                } 
+            });
+            receiveMessagesThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleMessage(Message message) {
+        MessageType messageType = message.getType();
+        Object content = message.getContent();
+        switch (messageType) {
+            case START:
+                notifyObservers("gameStart", "gameStart");
+                break;
+            case CHAT:
+                notifyObservers("message", content);
+                break;
+        }
     }
 
     public void disconnectFromServer() {
@@ -193,8 +202,8 @@ public class Model {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
-            if (serverIn != null) {
-                serverIn.close();
+            if (in != null) {
+                in.close();
             }
             if (out != null) {
                 out.close();
@@ -205,11 +214,13 @@ public class Model {
         }
     }
 
-    public void sendMessage(String message) {
-        if (out != null) {
-            out.println(message);
-        } else {
-            System.err.println("Error: PrintWriter not initialized.");
+    public void sendMessage(String stringMessage) {
+        Message message = new Message(MessageType.CHAT, stringMessage);
+        try {
+            out.writeObject(message);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
