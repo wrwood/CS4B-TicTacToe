@@ -146,7 +146,7 @@ public class ChatAndOptionsController implements Initializable, Observer {
         textFlowInit(chatDisplay);
 
         chatManager = new ChatManager(chatDisplay, scrollPane);
-        chatManager.addMessage("System", "Welcome to the chat, please join a server.", Color.RED);
+        chatManager.addMessage("System", "Welcome to the chat!", Color.RED);
 
         sendButton.setOnAction(e -> sendMessage());
         chatInput.setOnAction(e -> sendMessage());

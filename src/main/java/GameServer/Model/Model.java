@@ -37,12 +37,12 @@ public class Model {
         serverThread = new Thread(() -> {
             try {
                 serverSocket = new ServerSocket(serverPort);
-                System.out.println("Server started on port " + serverPort);
+                notifyObservers("message", "Server started on port " + serverPort);
                 matchManager = new MatchManager();
     
                 while (!Thread.currentThread().isInterrupted()) {
                     Socket clientSocket = serverSocket.accept();
-                    System.out.println("New client connected: " + clientSocket);
+                    notifyObservers("message", "New client connected: " + clientSocket);
                     matchManager.addPlayer(clientSocket);
                 }
             } catch (IOException e) {
