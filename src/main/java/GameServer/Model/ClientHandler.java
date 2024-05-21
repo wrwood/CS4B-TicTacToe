@@ -10,7 +10,7 @@ public class ClientHandler extends Thread {
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private Match currentMatch;
-    //has a match
+    private char marker;
 
     public ClientHandler(Socket socket) {
         this.clientSocket = socket;
@@ -60,7 +60,15 @@ public class ClientHandler extends Thread {
         return clientSocket;
     }
 
+    public char getMarker() {
+        return marker;
+    }
+
     public void setMatch(Match match) {
         this.currentMatch = match;
+    }
+
+    public void setMarker(char marker) {
+        this.marker = marker;
     }
 }

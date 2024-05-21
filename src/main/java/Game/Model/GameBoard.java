@@ -13,7 +13,7 @@ public class GameBoard {
         }
     }
 
-    public void placeMarker(int cellNumber, char marker) {
+    public synchronized void placeMarker(int cellNumber, char marker) {
         int row = cellNumber / 3;
         int col = cellNumber % 3;
 
@@ -155,6 +155,10 @@ public class GameBoard {
         } else {
             return 'x';
         }
+    }
+
+    public synchronized char[][] getBoard() {
+        return gameBoard;
     }
 }
 

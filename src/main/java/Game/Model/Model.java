@@ -45,6 +45,8 @@ public class Model {
     private ObjectOutputStream out;
     private int gamePort; 
 
+    private Boolean clientIsPlayer1;
+
     int[] winningLine;
 
     private GameModes gameMode;
@@ -61,13 +63,23 @@ public class Model {
         player2Marker = Config.DEFAULT_PLAYER2_MARKER.charAt(0);
         actingPlayerMarker = player1Marker;
         gameMode = Config.DEFAULT_GAME_MODE;
+        clientIsPlayer1 = true;
 
         gameBoard = new GameBoard();
     }
 
     // GameLogic ==================================================
     public void makeMove(int cellNumber) {
-        gameBoard.placeMarker(cellNumber, player1Marker);
+        switch (gameMode) {
+            case SINGLE_PLAYER: 
+                gameBoard.placeMarker(cellNumber, player1Marker);
+                break;
+            case ONLINE_MULTIPLAYER: 
+                gameBoard.placeMarker(cellNumber, player1Marker);
+                sendMessage(MessageType.PLAYER_MOVE, cellNumber);
+                break;
+            default:
+        }
     }
 
     
@@ -75,9 +87,7 @@ public class Model {
         switch (gameMode) {
             case SINGLE_PLAYER: notifyObservers(Config.PLAYER2_MOVE, gameBoard.computerPlay(player2Marker));   
                 break;
-            case LOCAL_MULTIPLAYER: notifyObservers(Config.PLAYER_TURN,  null);
-                break;
-            case ONLINE_MULTIPLAYER: //Wait for player 2 move 
+            case LOCAL_MULTIPLAYER: notifyObservers(Config.PLAYER_TURN,  true);
                 break;
         }
     }
@@ -87,7 +97,7 @@ public class Model {
         isPlayer2Turn = !isPlayer2Turn;
         // Updates BoardController when it is the active player turn to enable interaction with the board 
         if(isPlayer1Turn) {
-            notifyObservers(Config.PLAYER_TURN,  null);
+            notifyObservers(Config.PLAYER_TURN,  true);
         }
     }
 
@@ -158,6 +168,15 @@ public class Model {
     public int[] getWinningLine() {
         return winningLine;
     }
+
+    public boolean getIsPlayer1() {
+        return clientIsPlayer1;
+    }
+
+    public GameModes getGameMode() {
+        return gameMode;
+    }
+
     public void setWinningLine(int[] winningLine) {
         this.winningLine = winningLine;
     }
@@ -167,16 +186,19 @@ public class Model {
             socket = new Socket(serverAddress, port);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
-
+    
             Thread receiveMessagesThread = new Thread(() -> {
                 try {
                     Message receivedMessage;
-                    while ((receivedMessage = (Message) in.readObject()) != null) {
+                    while (!Thread.currentThread().isInterrupted() && socket.isConnected()) {
+                        receivedMessage = (Message) in.readObject();
                         handleMessage(receivedMessage);
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
-                } 
+                } finally {
+                    disconnectFromServer();
+                }
             });
             receiveMessagesThread.start();
         } catch (IOException e) {
@@ -188,12 +210,28 @@ public class Model {
         MessageType messageType = message.getType();
         Object content = message.getContent();
         switch (messageType) {
-            case START:
+            case START:                
+                if((boolean) content == false) {
+                    clientIsPlayer1 = false;
+                } 
                 notifyObservers("gameStart", "gameStart");
+                gameMode = GameModes.ONLINE_MULTIPLAYER;
                 break;
             case CHAT:
                 notifyObservers("message", content);
                 break;
+            case UPDATE_BOARD:
+                gameBoard.placeMarker((int) content, player2Marker);
+                notifyObservers(Config.PLAYER2_MOVE, content);
+                notifyObservers(Config.PLAYER_TURN, true);
+                break;
+            case GAME_RESULT:
+                System.out.println("asdfl;kajsd;flkjas;dlfkj :::::::::::: " + gameBoard.checkWin());
+                gameBoard.checkWin();
+                setGameResult((char) content);
+                notifyObservers(Config.GAME_OVER, gameResult);
+                break;
+            default:
         }
     }
 
@@ -214,8 +252,8 @@ public class Model {
         }
     }
 
-    public void sendMessage(String stringMessage) {
-        Message message = new Message(MessageType.CHAT, stringMessage);
+    public void sendMessage(MessageType messageType, Object Message) {
+        Message message = new Message(messageType, Message);
         try {
             out.writeObject(message);
             out.flush();

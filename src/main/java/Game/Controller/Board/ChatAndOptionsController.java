@@ -4,6 +4,7 @@ import Game.Controller.PausedController;
 import Game.Model.Model;
 import Game.Model.Observer;
 import Game.Util.ChatManager;
+import GameServer.Model.MessageType;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,7 +77,7 @@ public class ChatAndOptionsController implements Initializable, Observer {
         String text = chatInput.getText().trim();
         chatManager.addMessage("Sender", text, Color.GREEN);
         if (!text.isEmpty()) {
-            Model.getInstance().sendMessage(text);
+            Model.getInstance().sendMessage(MessageType.CHAT, (Object) text);
             chatInput.clear();
         }
     }

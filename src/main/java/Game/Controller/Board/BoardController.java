@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import Game.Controller.PausedController;
+
 import Game.Util.*;
 import Game.Model.Model;
 import Game.Model.Observer;
@@ -59,12 +60,13 @@ public class BoardController implements Initializable, Observer {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
         registerObservers();
         handleBoardRescale();
         createBoardButtons();
 
+        if(!(Model.getInstance().getIsPlayer1())) {
+            gameBoardGrid.setDisable(true);
+        }
         overlayPane.setMouseTransparent(true);
     }
 
@@ -99,11 +101,11 @@ public class BoardController implements Initializable, Observer {
     public void update(String eventType, Object data) {
         switch (eventType) {
             // When it is the players turn allows for access to board buttons 
-            case Config.PLAYER_TURN: gameBoardGrid.setDisable(false); 
+            case Config.PLAYER_TURN: gameBoardGrid.setDisable(!((boolean) data)); 
                 break;
             // Receives Player2's move and places marker while disabling the click event 
             case Config.PLAYER2_MOVE: cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
-                                      cells[(int)data].setOnMouseClicked(null);
+                                      cells[(int)data].setDisable(true);
                 break;
             case Config.GAME_OVER: GameOverAnimation();
                 break;
@@ -154,7 +156,7 @@ public class BoardController implements Initializable, Observer {
                 setupMarkerView(oMarkerView, cells[i]);
 
                 // Maps markers and cells for later use 
-                cellToOMarkerViewMap.put(cells[i], xMarkerView);
+                cellToXMarkerViewMap.put(cells[i], xMarkerView);
                 cellToOMarkerViewMap.put(cells[i], oMarkerView);
 
                 setUpCellClickEvent(i, xMarkerView, oMarkerView);
@@ -188,10 +190,16 @@ public class BoardController implements Initializable, Observer {
                 oMarkerView.setVisible(true);
             }
 
-            cells[i].setOnMouseClicked(null);
+            cells[i].setDisable(true);
             gameBoardGrid.setDisable(true);
 
-            makePlayerMove(i);
+            if(Model.getInstance().getGameMode() == GameModes.ONLINE_MULTIPLAYER) {
+                Model.getInstance().makeMove(i);
+            } else {
+                makePlayerMove(i);
+            }
+            
+            
         });
     }
 
