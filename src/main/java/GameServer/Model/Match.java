@@ -3,7 +3,9 @@ package GameServer.Model;
 import java.io.IOException;
 import Game.Model.GameBoard;
 import Game.Util.Config;
-import Game.Util.GameResult;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Match {
     private ClientHandler player1;
@@ -20,8 +22,8 @@ public class Match {
 
         gameBoard = new GameBoard();
         actingPlayer = player1;
-        player1.setMarker(Config.DEFAULT_PLAYER1_MARKER.charAt(0)); 
-        player2.setMarker(Config.DEFAULT_PLAYER2_MARKER.charAt(0)); 
+        player1.setMarker(Config.DEFAULT_PLAYER1_MARKER.charAt(0));
+        player2.setMarker(Config.DEFAULT_PLAYER2_MARKER.charAt(0));
     }
 
     public void startGame() {

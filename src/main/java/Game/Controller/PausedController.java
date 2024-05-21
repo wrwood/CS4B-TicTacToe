@@ -35,7 +35,7 @@ public class PausedController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         resumeButton.setOnAction(e-> {
-            //resumeGame();
+            closeMenu();
         });
         exitGameButton.setOnAction(e->{
             System.exit(0);
@@ -50,10 +50,5 @@ public class PausedController implements Initializable {
     private void closeMenu() {
         Stage stage = (Stage)resumeButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
-        try {
-            Model.getInstance().getViewFactory().showBoard();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }

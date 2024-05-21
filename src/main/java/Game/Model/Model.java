@@ -1,5 +1,7 @@
 package Game.Model;
 
+import Game.Controller.Board.BoardController;
+import Game.Controller.Board.GameController;
 import Game.Util.*;
 import Game.Views.ViewFactory;
 import GameServer.Model.MessageType;
@@ -56,6 +58,8 @@ public class Model {
     public GameResult gameResult;
 
     private GameBoard gameBoard;
+    private BoardController boardController;
+    private GameController gameController;
 
     private int player1Score;
     private int player2Score;
@@ -302,5 +306,23 @@ public class Model {
 
     public int getTieScore() {
         return tieScore;
+    }
+
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+    public BoardController getBoardController() {
+        return boardController;
+    }
+    public void setBoardController(BoardController boardController) {
+        this.boardController = boardController;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 }

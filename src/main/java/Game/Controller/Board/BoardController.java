@@ -70,11 +70,11 @@ public class BoardController implements Initializable, Observer {
 
 
     // TurnLogic ==================================================
-    private void makePlayerMove(int moveIndex) { // When a board button is clicked 
+    private void makePlayerMove(int moveIndex) { // When a board button is clicked
         Model.getInstance().makeMove(moveIndex);
 
-        // If the game is not over moves to the next player turn 
-        if(Model.getInstance().isGameOver()) {     
+        // If the game is not over moves to the next player turn
+        if(Model.getInstance().isGameOver()) {
             Model.getInstance().handleGameOver();
         } else {
             Model.getInstance().switchPlayerTurn();
@@ -97,12 +97,12 @@ public class BoardController implements Initializable, Observer {
     @Override
     public void update(String eventType, Object data) {
         switch (eventType) {
-            // When it is the players turn allows for access to board buttons 
-            case Config.PLAYER_TURN: gameBoardGrid.setDisable(!((boolean) data)); 
+            // When it is the players turn allows for access to board buttons
+            case Config.PLAYER_TURN: gameBoardGrid.setDisable(!((boolean) data));
                 break;
-            // Receives Player2's move and places marker while disabling the click event 
+            // Receives Player2's move and places marker while disabling the click event
             case Config.PLAYER2_MOVE: cellToOMarkerViewMap.get(cells[(int)data]).setVisible(true);
-                                      cells[(int)data].setDisable(true);
+                cells[(int)data].setDisable(true);
                 break;
             case Config.GAME_OVER: GameOverAnimation();
                 break;
@@ -156,7 +156,7 @@ public class BoardController implements Initializable, Observer {
                 setupMarkerView(xMarkerView, cells[i]);
                 setupMarkerView(oMarkerView, cells[i]);
 
-                // Maps markers and cells for later use 
+                // Maps markers and cells for later use
                 cellToXMarkerViewMap.put(cells[i], xMarkerView);
                 cellToOMarkerViewMap.put(cells[i], oMarkerView);
 
@@ -199,8 +199,8 @@ public class BoardController implements Initializable, Observer {
             } else {
                 makePlayerMove(i);
             }
-            
-            
+
+
         });
     }
 
@@ -268,7 +268,7 @@ public class BoardController implements Initializable, Observer {
             throw new RuntimeException(ex);
         }
     }
-    
+
     private void openResult() {
         Stage stage = (Stage) boardRoot.getScene().getWindow();
         unregisterObservers();

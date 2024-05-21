@@ -79,15 +79,13 @@ public class ChatAndOptionsController implements Initializable, Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/paused.fxml"));
             Parent root = loader.load();
 
-            PausedController pauseMenuController = loader.getController();
-            pauseMenuController.setBoardController(this);
-
             if (pauseMenu == null) {
                 pauseMenu = new Stage();
                 pauseMenu.initModality(Modality.APPLICATION_MODAL);
-                pauseMenu.initOwner(ChatOptionRoot.getScene().getWindow());
+                pauseMenu.initOwner(pauseButton.getScene().getWindow());
                 pauseMenu.initStyle(StageStyle.TRANSPARENT);
             }
+
             Scene pauseMenuScene = new Scene(root);
             pauseMenuScene.setFill(Color.TRANSPARENT);
             pauseMenu.setScene(pauseMenuScene);
@@ -122,6 +120,7 @@ public class ChatAndOptionsController implements Initializable, Observer {
         chatManager = new ChatManager(chatDisplay, scrollPane);
         chatManager.addMessage("System", "Welcome to the chat!", Color.RED);
 
+        pauseButton.setOnAction(e -> pauseGame());
         sendButton.setOnAction(e -> sendMessage());
         chatInput.setOnAction(e -> sendMessage());
         quitButton.setOnAction(e->{

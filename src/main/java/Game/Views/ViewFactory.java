@@ -34,7 +34,7 @@ public class ViewFactory {
 
     }
 
-// GetPane ==================================================
+    // GetPane ==================================================
     public AnchorPane GetMainMenu()
     {
         if (mainMenu == null) {
@@ -92,7 +92,7 @@ public class ViewFactory {
         return loadingScreen;
     }
 
-// ShowPane ==================================================
+    // ShowPane ==================================================
     public void showMainMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainMenu.fxml"));
         MainMenuController controller = new MainMenuController();
@@ -127,7 +127,7 @@ public class ViewFactory {
         createStage(loader);
     }
 
-// Helper Methods ==================================================
+    // Helper Methods ==================================================
     private void createStage(FXMLLoader loader) throws IOException {
         Scene scene = new Scene(loader.load());
         URL styleSheetURL = getClass().getResource("/StyleSheet/darkMode.css");
