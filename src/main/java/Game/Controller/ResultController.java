@@ -49,7 +49,7 @@ public class ResultController implements Initializable {
         }
 
         playAgainButton.setOnAction(e-> {
-            Model.getInstance().gameResult = GameResult.LOSS;
+            Model.getInstance().resetGameState();
             closeResults();
         });
         mainMenuButton.setOnAction(e->{
@@ -90,7 +90,7 @@ public class ResultController implements Initializable {
         Stage stage = (Stage)playAgainButton.getScene().getWindow();
         Model.getInstance().getViewFactory().closeStage(stage);
         try {
-            Model.getInstance().getViewFactory().showBoard();
+            Model.getInstance().getViewFactory().showGameWindow();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

@@ -160,5 +160,8 @@ public class GameBoard {
     public synchronized char[][] getBoard() {
         return gameBoard;
     }
+    public synchronized GameBoard newGameBoard() {
+        return new GameBoard();
+    }
 }
 

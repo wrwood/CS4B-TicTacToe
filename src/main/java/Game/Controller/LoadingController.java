@@ -37,8 +37,8 @@ public class LoadingController implements Initializable, Observer {
             Stage stage = (Stage) multiplayerPane.getScene().getWindow();
             Model.getInstance().getViewFactory().closeStage(stage);
 
-            System.out.println("Observer removed");
-            Model.getInstance().removeObserver("gameStart", this);
+            //System.out.println("Observer removed");
+            //Model.getInstance().removeObserver("gameStart", this);
 
             Model.getInstance().getViewFactory().showGameWindow();
         } catch (IOException e) {

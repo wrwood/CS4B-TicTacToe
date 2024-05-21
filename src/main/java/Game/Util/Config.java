@@ -10,8 +10,12 @@ public class Config {
     public static final String PLAYER_TURN = "PlayerTurn";
     public static final String PLAYER2_MOVE = "Player2Move";
     public static final String GAME_OVER = "GameOver";
+    public static final String SCORE_UPDATE = "ScoreUpdate";
+    public static final String GAME_RESET = "GameReset";
 
     // Image paths
     public static final String PLAYER1_MARKER_IMAGE = "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hj-fullview.png";
     public static final String PLAYER2_MARKER_IMAGE = "/images/dragon_egg_png_overlay__by_lewis4721_de8r1hq-414w-2x.png";
+
+
 }

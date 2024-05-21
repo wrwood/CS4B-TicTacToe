@@ -55,9 +55,6 @@ public class BoardController implements Initializable, Observer {
     @FXML private GridPane gameBoardGrid;
     @FXML private Pane overlayPane;
 
-
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         registerObservers();
@@ -109,6 +106,8 @@ public class BoardController implements Initializable, Observer {
                 break;
             case Config.GAME_OVER: GameOverAnimation();
                 break;
+            case Config.GAME_RESET: resetBoard();
+                break;
         }
     }
 
@@ -116,12 +115,14 @@ public class BoardController implements Initializable, Observer {
         Model.getInstance().registerObserver(Config.PLAYER_TURN, this);
         Model.getInstance().registerObserver(Config.PLAYER2_MOVE, this);
         Model.getInstance().registerObserver(Config.GAME_OVER, this);
+        Model.getInstance().registerObserver(Config.GAME_RESET, this);
     }
 
     private void unregisterObservers() {
         Model.getInstance().removeObserver(Config.PLAYER_TURN, this);
         Model.getInstance().removeObserver(Config.PLAYER2_MOVE, this);
         Model.getInstance().removeObserver(Config.GAME_OVER, this);
+        Model.getInstance().removeObserver(Config.GAME_RESET, this);
     }
 
     // Rescaling ==================================================
@@ -201,6 +202,16 @@ public class BoardController implements Initializable, Observer {
             
             
         });
+    }
+
+    private void resetBoard() {
+        for (Pane cell : cells) {
+            cell.getChildren().clear();
+        }
+        cellToXMarkerViewMap.clear();
+        cellToOMarkerViewMap.clear();
+        createBoardButtons();
+        gameBoardGrid.setDisable(!Model.getInstance().getIsPlayer1());
     }
 
 

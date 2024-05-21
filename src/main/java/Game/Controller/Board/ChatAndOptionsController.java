@@ -44,33 +44,6 @@ public class ChatAndOptionsController implements Initializable, Observer {
 
     private Stage pauseMenu;
 
-    /*
-    @FXML
-    private void sendMessage(Event event) {
-        String messageString = SendMessageEntry.getText();
-        Model.getInstance().sendMessage(messageString);
-        SendMessageEntry.clear();
-    }
-
-    @FXML
-    private void handleServerConnection(ActionEvent event) {
-        String portString = PortEntry.getText();
-        String ipString = ServerIPEntry.getText();
-
-        if (!portString.isEmpty() && !ipString.isEmpty()) {
-            int port = Integer.parseInt(portString);
-            Model.getInstance().connectToServer(ipString, port);
-        } else {
-            chatManager.addMessage("System", "Please enter a port and IP.", Color.RED);
-        }
-    }
-
-    @FXML
-    private void handleServerDisconnect(ActionEvent event) {
-        Model.getInstance().disconnectFromServer();
-    }*/
-
-
 
     @FXML
     private void sendMessage() {

@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static GameServer.Model.MessageType.START;
+import static GameServer.Model.MessageType.UPDATE_BOARD;
+
 /*
     Structured as
 
@@ -54,6 +57,10 @@ public class Model {
 
     private GameBoard gameBoard;
 
+    private int player1Score;
+    private int player2Score;
+    private int tieScore;
+
     private Model() {
         observersMap = new HashMap<>();
         this.viewFactory = new ViewFactory();
@@ -66,6 +73,10 @@ public class Model {
         clientIsPlayer1 = true;
 
         gameBoard = new GameBoard();
+
+        player1Score = 0;
+        player2Score = 0;
+        tieScore = 0;
     }
 
     // GameLogic ==================================================
@@ -118,11 +129,16 @@ public class Model {
     private void setGameResult(char winner) {
         if (winner == 't') {
             gameResult = GameResult.TIE;
+            tieScore++;
         } else if (winner == player1Marker) {
             gameResult = GameResult.WIN;
+            player1Score++;
         } else if (winner == player2Marker) {
             gameResult = GameResult.LOSS;
+            player2Score++;
         }
+
+        notifyObservers(Config.SCORE_UPDATE, new int[]{player1Score, player2Score, tieScore});
     }
 
     // EventManager ==================================================
@@ -226,10 +242,15 @@ public class Model {
                 notifyObservers(Config.PLAYER_TURN, true);
                 break;
             case GAME_RESULT:
-                System.out.println("asdfl;kajsd;flkjas;dlfkj :::::::::::: " + gameBoard.checkWin());
-                gameBoard.checkWin();
-                setGameResult((char) content);
-                notifyObservers(Config.GAME_OVER, gameResult);
+                Platform.runLater(() -> {
+                    System.out.println("asdfl;kajsd;flkjas;dlfkj :::::::::::: " + gameBoard.checkWin());
+                    char winner = (char) content;
+                    setGameResult(winner);
+                    notifyObservers(Config.GAME_OVER, gameResult);
+                    gameBoard = new GameBoard();
+                    isPlayer1Turn = true;
+                    isPlayer2Turn = false;
+                });
                 break;
             default:
         }
@@ -260,5 +281,26 @@ public class Model {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void resetGameState() {
+        gameBoard = new GameBoard();
+        isPlayer1Turn = true;
+        isPlayer2Turn = false;
+        actingPlayerMarker = player1Marker;
+        gameResult = null;
+        notifyObservers(Config.GAME_RESET, null);
+    }
+
+    public int getPlayer1Score() {
+        return player1Score;
+    }
+
+    public int getPlayer2Score() {
+        return player2Score;
+    }
+
+    public int getTieScore() {
+        return tieScore;
     }
 }

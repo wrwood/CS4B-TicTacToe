@@ -8,98 +8,65 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ImageView fitHeight="600.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@../../images/stonewall.png" />
-         </image>
-      </ImageView>
-      <VBox prefHeight="597.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Pane prefHeight="112.0" prefWidth="300.0">
-               <children>
-                  <ImageView fitHeight="100.0" fitWidth="280.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/ScoreBoardImg.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="150.0" layoutX="57.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/Player1Img.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" text="0" textAlignment="CENTER" textFill="#fcfafa">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="150.0" layoutX="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/Player2Img.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="-3.0" text="0" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <ImageView fitHeight="60.0" fitWidth="200.0" layoutX="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/GamesTiedImg.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="112.0" text="00" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <ImageView fitHeight="69.0" fitWidth="155.0" layoutX="51.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/MoveTimerImg.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
-            <Pane prefHeight="60.0" prefWidth="250.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="-5.0" text="00:00" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font size="48.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-         </children>
-      </VBox>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.Controller.Board.ScoreBoardController">
+   <ImageView fitHeight="600.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Image url="@../../images/stonewall.png" />
+   </ImageView>
+   <VBox prefHeight="597.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane prefHeight="112.0" prefWidth="300.0">
+         <ImageView fitHeight="100.0" fitWidth="280.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/ScoreBoardImg.png" />
+         </ImageView>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <ImageView fitHeight="60.0" fitWidth="150.0" layoutX="57.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/Player1Img.png" />
+         </ImageView>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <Label fx:id="player1Score" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" text="0" textAlignment="CENTER" textFill="#fcfafa">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Label>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <ImageView fitHeight="60.0" fitWidth="150.0" layoutX="54.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/Player2Img.png" />
+         </ImageView>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <Label fx:id="player2Score" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="-3.0" text="0" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Label>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <ImageView fitHeight="60.0" fitWidth="200.0" layoutX="54.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../images/GamesTiedImg.png" />
+         </ImageView>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <Label fx:id="gameTieScore" alignment="CENTER" contentDisplay="CENTER" layoutX="112.0" text="00" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Label>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <ImageView fitHeight="69.0" fitWidth="155.0" layoutX="51.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../images/MoveTimerImg.png" />
+            </image>
+         </ImageView>
+      </Pane>
+      <Pane prefHeight="60.0" prefWidth="250.0">
+         <Label fx:id="moveTimer" alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="-5.0" text="00:00" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font size="48.0" />
+            </font>
+         </Label>
+      </Pane>
+   </VBox>
 </AnchorPane>

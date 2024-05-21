@@ -25,6 +25,7 @@ public class Match {
     }
 
     public void startGame() {
+        gameBoard = new GameBoard();
         Message startMessage1 = new Message(MessageType.START, true);
         Message startMessage2 = new Message(MessageType.START, false);
         sendMessage(startMessage1, player1);
@@ -58,32 +59,40 @@ public class Match {
     public void handleMessage(Message message, ClientHandler sender) {
         MessageType messageType = message.getType();
         Object content = message.getContent();
-        //TODO implement the rest of the messages here
-        switch (messageType) { 
+
+        switch (messageType) {
             case CHAT:
                 sendToOpponent(message, sender);
                 break;
             case PLAYER_MOVE:
-                if(sender == actingPlayer) {
+                if (sender == actingPlayer) {
                     gameBoard.placeMarker((int) content, sender.getMarker());
                     Message updateMessage = new Message(MessageType.UPDATE_BOARD, (int) content);
                     sendToOpponent(updateMessage, sender);
-                    
-                    if(gameBoard.checkWin() == ' ') {
+
+                    char winner = gameBoard.checkWin();
+                    if (winner == ' ') {
                         switchActingPlayer();
-                    } else if (gameBoard.checkWin() == player1.getMarker()) {
-                        sendMessage(new Message(MessageType.GAME_RESULT, player1.getMarker()), player1);
-                        sendMessage(new Message(MessageType.GAME_RESULT, player2.getMarker()), player2);
-                    } else if (gameBoard.checkWin() == player2.getMarker()) {
-                        sendMessage(new Message(MessageType.GAME_RESULT, player2.getMarker()), player1);
-                        sendMessage(new Message(MessageType.GAME_RESULT, player1.getMarker()), player2);
-                    } else if (gameBoard.checkWin() == 't') {
-                        sendMessage(new Message(MessageType.GAME_RESULT, 't'), player1);
-                        sendMessage(new Message(MessageType.GAME_RESULT, 't'), player2);
+                    } else {
+                        gameBoard = new GameBoard();
+                        handleGameOver(winner);
                     }
                 }
                 break;
-            default: 
+            default:
+        }
+    }
+
+    private void handleGameOver(char winner) {
+        if (winner == player1.getMarker()) {
+            sendMessage(new Message(MessageType.GAME_RESULT, player1.getMarker()), player1);
+            sendMessage(new Message(MessageType.GAME_RESULT, player2.getMarker()), player2);
+        } else if (winner == player2.getMarker()) {
+            sendMessage(new Message(MessageType.GAME_RESULT, player2.getMarker()), player1);
+            sendMessage(new Message(MessageType.GAME_RESULT, player1.getMarker()), player2);
+        } else if (winner == 't') {
+            sendMessage(new Message(MessageType.GAME_RESULT, 't'), player1);
+            sendMessage(new Message(MessageType.GAME_RESULT, 't'), player2);
         }
     }
 
